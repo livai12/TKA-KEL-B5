@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Order Processing Service - Final Project Teknologi Komputasi Awan" />
+  <title>Order Processing Service</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================ -->
+  <!-- AUTH SECTION                                  -->
+  <!-- ============================================ -->
+  <div id="auth-section" class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>Order Processing Service</h1>
+        <p>Final Project Teknologi Komputasi Awan</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <h2>Login</h2>
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="contoh: user1@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Masukkan password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-login">Login</button>
+        <p class="auth-toggle">Belum punya akun? <a href="#" onclick="toggleAuth(event)">Daftar di sini</a></p>
+        <div id="login-error" class="alert alert-error hidden"></div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
+        <h2>Registrasi</h2>
+        <div class="form-group">
+          <label for="reg-name">Nama Lengkap</label>
+          <input type="text" id="reg-name" placeholder="Nama lengkap" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="Email aktif" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" placeholder="Minimal 6 karakter" required minlength="6" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-city">Kota</label>
+            <input type="text" id="reg-city" placeholder="Kota" />
+          </div>
+          <div class="form-group">
+            <label for="reg-phone">No. Telepon</label>
+            <input type="text" id="reg-phone" placeholder="08xxxxxxxxxx" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-register">Daftar</button>
+        <p class="auth-toggle">Sudah punya akun? <a href="#" onclick="toggleAuth(event)">Login di sini</a></p>
+        <div id="register-error" class="alert alert-error hidden"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- MAIN APPLICATION                              -->
+  <!-- ============================================ -->
+  <div id="app-section" class="hidden">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1>Order Processing Service</h1>
+      </div>
+      <div class="topbar-right">
+        <span id="user-info" class="user-badge"></span>
+        <button class="btn btn-outline btn-sm" onclick="handleLogout()">Logout</button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="products" onclick="switchTab('products')">Katalog Produk</button>
+      <button class="tab-btn" data-tab="create-order" onclick="switchTab('create-order')">Buat Pesanan</button>
+      <button class="tab-btn" data-tab="my-orders" onclick="switchTab('my-orders')">Pesanan Saya</button>
+      <button class="tab-btn admin-only hidden" data-tab="admin" onclick="switchTab('admin')">Admin Panel</button>
+    </nav>
+
+    <main class="main-content">
+
+      <!-- TAB: Katalog Produk -->
+      <section id="tab-products" class="tab-panel active">
+        <div class="section-header">
+          <h2>Katalog Produk</h2>
+          <div class="filter-bar">
+            <select id="filter-category" onchange="loadProducts()">
+              <option value="">Semua Kategori</option>
+              <option value="Elektronik">Elektronik</option>
+              <option value="Smartphone">Smartphone</option>
+              <option value="Rumah Tangga">Rumah Tangga</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Olahraga">Olahraga</option>
+              <option value="Buku">Buku</option>
+              <option value="Makanan">Makanan</option>
+            </select>
+            <select id="filter-sort" onchange="loadProducts()">
+              <option value="newest">Terbaru</option>
+              <option value="price_asc">Harga Terendah</option>
+              <option value="price_desc">Harga Tertinggi</option>
+              <option value="rating">Rating Tertinggi</option>
+            </select>
+          </div>
+        </div>
+        <div id="products-grid" class="products-grid">
+          <p class="loading-text">Memuat produk...</p>
+        </div>
+        <div id="products-pagination" class="pagination"></div>
+      </section>
+
+      <!-- TAB: Buat Pesanan -->
+      <section id="tab-create-order" class="tab-panel hidden">
+        <h2>Buat Pesanan Baru</h2>
+        <div class="order-layout">
+          <div class="order-form-section">
+            <div class="card">
+              <h3>Tambah Item</h3>
+              <div class="form-group">
+                <label for="select-product">Pilih Produk</label>
+                <select id="select-product">
+                  <option value="">-- Pilih Produk --</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="item-qty">Jumlah</label>
+                <input type="number" id="item-qty" min="1" value="1" />
+              </div>
+              <button class="btn btn-secondary" onclick="addToCart()">Tambah ke Keranjang</button>
+            </div>
+
+            <div class="card">
+              <h3>Detail Pengiriman</h3>
+              <div class="form-group">
+                <label for="order-address">Alamat Pengiriman</label>
+                <textarea id="order-address" rows="2" placeholder="Masukkan alamat lengkap"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="order-payment">Metode Pembayaran</label>
+                <select id="order-payment">
+                  <option value="transfer_bank">Transfer Bank</option>
+                  <option value="gopay">GoPay</option>
+                  <option value="ovo">OVO</option>
+                  <option value="dana">DANA</option>
+                  <option value="qris">QRIS</option>
+                  <option value="kartu_kredit">Kartu Kredit</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="order-shipping">Ongkos Kirim</label>
+                <select id="order-shipping">
+                  <option value="0">Gratis Ongkir</option>
+                  <option value="9000">Rp 9.000</option>
+                  <option value="15000">Rp 15.000</option>
+                  <option value="25000">Rp 25.000</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="order-notes">Catatan (opsional)</label>
+                <input type="text" id="order-notes" placeholder="Catatan untuk penjual" />
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-section">
+            <div class="card">
+              <h3>Keranjang</h3>
+              <div id="cart-items">
+                <p class="empty-state">Keranjang kosong</p>
+              </div>
+              <div id="cart-summary" class="cart-summary hidden">
+                <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">Rp 0</span></div>
+                <div class="summary-row"><span>Ongkos Kirim</span><span id="cart-shipping">Rp 0</span></div>
+                <div class="summary-row total"><span>Total</span><span id="cart-total">Rp 0</span></div>
+                <button class="btn btn-primary btn-full" onclick="submitOrder()">Buat Pesanan</button>
+              </div>
+            </div>
+            <div id="order-result" class="alert hidden"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: Pesanan Saya -->
+      <section id="tab-my-orders" class="tab-panel hidden">
+        <div class="section-header">
+          <h2>Pesanan Saya</h2>
+          <div class="filter-bar">
+            <select id="order-status-filter" onchange="loadOrders()">
+              <option value="">Semua Status</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div id="orders-list" class="orders-list">
+          <p class="loading-text">Memuat pesanan...</p>
+        </div>
+        <div id="orders-pagination" class="pagination"></div>
+
+        <!-- Order Detail Modal -->
+        <div id="order-detail-modal" class="modal hidden">
+          <div class="modal-backdrop" onclick="closeModal()"></div>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Detail Pesanan</h3>
+              <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="order-detail-body" class="modal-body"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: Admin Panel -->
+      <section id="tab-admin" class="tab-panel hidden">
+        <h2>Admin Panel</h2>
+
+        <!-- Admin Stats -->
+        <div id="admin-stats" class="stats-grid"></div>
+
+        <!-- Order Management -->
+        <div class="card" style="margin-top: 24px;">
+          <h3>Update Status Pesanan</h3>
+          <div class="form-row">
+            <div class="form-group" style="flex:2">
+              <label for="admin-order-id">Order ID</label>
+              <input type="text" id="admin-order-id" placeholder="Masukkan order_id (UUID)" />
+            </div>
+            <div class="form-group" style="flex:1">
+              <label for="admin-new-status">Status Baru</label>
+              <select id="admin-new-status">
+                <option value="processing">Processing</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:0; align-self:flex-end">
+              <button class="btn btn-primary" onclick="adminUpdateStatus()">Update</button>
+            </div>
+          </div>
+          <div id="admin-update-result" class="alert hidden"></div>
+        </div>
+
+        <!-- All Orders (admin view) -->
+        <div class="card" style="margin-top: 24px;">
+          <h3>Semua Pesanan</h3>
+          <div id="admin-orders-list" class="orders-list"></div>
+          <div id="admin-orders-pagination" class="pagination"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- JAVASCRIPT                                    -->
+  <!-- ============================================ -->
+  <script>
+    // -------------------------------------------
+    // CONFIG
+    // Kosongkan API_BASE jika frontend di-serve
+    // oleh Nginx yang sama dengan API proxy.
+    // Isi dengan URL backend jika akses langsung.
+    // -------------------------------------------
+    const API_BASE = "";
+
+    // -------------------------------------------
+    // STATE
+    // -------------------------------------------
+    let authToken = localStorage.getItem("token") || null;
+    let currentUser = JSON.parse(localStorage.getItem("user") || "null");
+    let cart = [];
+    let allProducts = []; // cache untuk dropdown
+
+    // -------------------------------------------
+    // INIT
+    // -------------------------------------------
+    document.addEventListener("DOMContentLoaded", () => {
+      if (authToken && currentUser) {
+        showApp();
+      }
+    });
+
+    // -------------------------------------------
+    // AUTH
+    // -------------------------------------------
+    function toggleAuth(e) {
+      e.preventDefault();
+      document.getElementById("login-form").classList.toggle("hidden");
+      document.getElementById("register-form").classList.toggle("hidden");
+      clearAlerts();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+      const btn = document.getElementById("btn-login");
+
+      btn.disabled = true;
+      btn.textContent = "Memproses...";
+      clearAlerts();
+
+      try {
+        const res = await api("POST", "/auth/login", { email, password });
+        if (res.error) {
+          showAlert("login-error", res.error);
+          return;
+        }
+        authToken = res.token;
+        currentUser = res.user;
+        localStorage.setItem("token", authToken);
+        localStorage.setItem("user", JSON.stringify(currentUser));
+        showApp();
+      } catch (err) {
+        showAlert("login-error", "Gagal terhubung ke server: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Login";
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById("reg-name").value.trim(),
+        email: document.getElementById("reg-email").value.trim(),
+        password: document.getElementById("reg-password").value,
+        city: document.getElementById("reg-city").value.trim(),
+        phone: document.getElementById("reg-phone").value.trim(),
+      };
+      const btn = document.getElementById("btn-register");
+
+      btn.disabled = true;
+      btn.textContent = "Memproses...";
+      clearAlerts();
+
+      try {
+        const res = await api("POST", "/auth/register", data);
+        if (res.error) {
+          showAlert("register-error", res.error);
+          return;
+        }
+        authToken = res.token;
+        currentUser = res.user;
+        localStorage.setItem("token", authToken);
+        localStorage.setItem("user", JSON.stringify(currentUser));
+        showApp();
+      } catch (err) {
+        showAlert("register-error", "Gagal terhubung ke server: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Daftar";
+      }
+    }
+
+    function handleLogout() {
+      authToken = null;
+      currentUser = null;
+      cart = [];
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      document.getElementById("app-section").classList.add("hidden");
+      document.getElementById("auth-section").classList.remove("hidden");
+      clearAlerts();
+    }
+
+    function showApp() {
+      document.getElementById("auth-section").classList.add("hidden");
+      document.getElementById("app-section").classList.remove("hidden");
+      document.getElementById("user-info").textContent =
+        currentUser.name + " (" + currentUser.role + ")";
+
+      // Tampilkan tab admin jika admin
+      document.querySelectorAll(".admin-only").forEach(el => {
+        el.classList.toggle("hidden", currentUser.role !== "admin");
+      });
+
+      loadProducts();
+      loadProductDropdown();
+      switchTab("products");
+    }
+
+    // -------------------------------------------
+    // TABS
+    // -------------------------------------------
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.add("hidden"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+
+      const panel = document.getElementById("tab-" + tabId);
+      const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+      if (panel) panel.classList.remove("hidden");
+      if (btn) btn.classList.add("active");
+
+      // Load data saat tab dibuka
+      if (tabId === "products") loadProducts();
+      if (tabId === "my-orders") loadOrders();
+      if (tabId === "admin") { loadAdminStats(); loadAdminOrders(); }
+    }
+
+    // -------------------------------------------
+    // PRODUCTS
+    // -------------------------------------------
+    let productsPage = 1;
+
+    async function loadProducts(page) {
+      if (page) productsPage = page;
+      const category = document.getElementById("filter-category").value;
+      const sort = document.getElementById("filter-sort").value;
+
+      let url = `/products?page=${productsPage}&limit=12&sort=${sort}`;
+      if (category) url += `&category=${encodeURIComponent(category)}`;
+
+      const grid = document.getElementById("products-grid");
+      grid.innerHTML = '<p class="loading-text">Memuat produk...</p>';
+
+      try {
+        const res = await api("GET", url);
+        if (!res.data || res.data.length === 0) {
+          grid.innerHTML = '<p class="empty-state">Tidak ada produk ditemukan</p>';
+          document.getElementById("products-pagination").innerHTML = "";
+          return;
+        }
+
+        grid.innerHTML = res.data.map(p => `
+          <div class="product-card">
+            <div class="product-info">
+              <span class="product-category">${esc(p.category)}</span>
+              <h4 class="product-name">${esc(p.name)}</h4>
+              <div class="product-meta">
+                <span class="product-price">${formatRp(p.price)}</span>
+                <span class="product-stock">Stok: ${p.stock}</span>
+              </div>
+              <div class="product-rating">
+                ${"*".repeat(Math.round(p.rating || 0)).split("").map(() => '<span class="star">&#9733;</span>').join("")}
+                <span class="rating-num">${(p.rating || 0).toFixed(1)}</span>
+              </div>
+            </div>
+          </div>
+        `).join("");
+
+        renderPagination("products-pagination", res.page, res.total_pages, (p) => loadProducts(p));
+      } catch (err) {
+        grid.innerHTML = `<p class="error-state">Error: ${esc(err.message)}</p>`;
+      }
+    }
+
+    async function loadProductDropdown() {
+      try {
+        const res = await api("GET", "/products?limit=100");
+        allProducts = res.data || [];
+        const select = document.getElementById("select-product");
+        select.innerHTML = '<option value="">-- Pilih Produk --</option>' +
+          allProducts.map(p =>
+            `<option value="${p._id}" data-price="${p.price}" data-name="${esc(p.name)}" data-stock="${p.stock}">${esc(p.name)} - ${formatRp(p.price)} (stok: ${p.stock})</option>`
+          ).join("");
+      } catch (err) {
+        console.error("Gagal memuat produk untuk dropdown:", err);
+      }
+    }
+
+    // -------------------------------------------
+    // CART & ORDER CREATION
+    // -------------------------------------------
+    function addToCart() {
+      const select = document.getElementById("select-product");
+      const qtyInput = document.getElementById("item-qty");
+      const productId = select.value;
+      const qty = parseInt(qtyInput.value) || 1;
+
+      if (!productId) { alert("Pilih produk terlebih dahulu"); return; }
+
+      const option = select.options[select.selectedIndex];
+      const name = option.dataset.name;
+      const price = parseFloat(option.dataset.price);
+
+      // Cek apakah sudah ada di cart
+      const existing = cart.find(c => c.product_id === productId);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({ product_id: productId, name, price, qty });
+      }
+
+      renderCart();
+      qtyInput.value = 1;
+      select.value = "";
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById("cart-items");
+      const summary = document.getElementById("cart-summary");
+
+      if (cart.length === 0) {
+        container.innerHTML = '<p class="empty-state">Keranjang kosong</p>';
+        summary.classList.add("hidden");
+        return;
+      }
+
+      container.innerHTML = cart.map((item, i) => `
+        <div class="cart-item">
+          <div class="cart-item-info">
+            <span class="cart-item-name">${esc(item.name)}</span>
+            <span class="cart-item-detail">${item.qty}x ${formatRp(item.price)}</span>
+          </div>
+          <div class="cart-item-actions">
+            <span class="cart-item-subtotal">${formatRp(item.price * item.qty)}</span>
+            <button class="btn-remove" onclick="removeFromCart(${i})">&times;</button>
+          </div>
+        </div>
+      `).join("");
+
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const shipping = parseInt(document.getElementById("order-shipping").value) || 0;
+
+      document.getElementById("cart-subtotal").textContent = formatRp(subtotal);
+      document.getElementById("cart-shipping").textContent = formatRp(shipping);
+      document.getElementById("cart-total").textContent = formatRp(subtotal + shipping);
+      summary.classList.remove("hidden");
+    }
+
+    // Update shipping display saat pilihan berubah
+    document.addEventListener("DOMContentLoaded", () => {
+      const shippingSelect = document.getElementById("order-shipping");
+      if (shippingSelect) {
+        shippingSelect.addEventListener("change", renderCart);
+      }
+    });
+
+    async function submitOrder() {
+      if (cart.length === 0) { alert("Keranjang masih kosong"); return; }
+
+      const payload = {
+        items: cart.map(c => ({ product_id: c.product_id, qty: c.qty })),
+        payment_method: document.getElementById("order-payment").value,
+        shipping_cost: parseInt(document.getElementById("order-shipping").value) || 0,
+        address: document.getElementById("order-address").value.trim(),
+        notes: document.getElementById("order-notes").value.trim(),
+      };
+
+      const resultEl = document.getElementById("order-result");
+
+      try {
+        const res = await api("POST", "/orders", payload);
+        if (res.error) {
+          resultEl.className = "alert alert-error";
+          resultEl.textContent = "Error: " + res.error;
+          resultEl.classList.remove("hidden");
+          return;
+        }
+
+        cart = [];
+        renderCart();
+        resultEl.className = "alert alert-success";
+        resultEl.innerHTML = `Pesanan berhasil dibuat.<br>Order ID: <strong>${esc(res.order_id)}</strong><br>Total: ${formatRp(res.total)}`;
+        resultEl.classList.remove("hidden");
+
+        // Refresh product dropdown (stok berubah)
+        loadProductDropdown();
+      } catch (err) {
+        resultEl.className = "alert alert-error";
+        resultEl.textContent = "Gagal membuat pesanan: " + err.message;
+        resultEl.classList.remove("hidden");
+      }
+    }
+
+    // -------------------------------------------
+    // ORDERS LIST
+    // -------------------------------------------
+    let ordersPage = 1;
+
+    async function loadOrders(page) {
+      if (page) ordersPage = page;
+      const status = document.getElementById("order-status-filter").value;
+      let url = `/orders?page=${ordersPage}&limit=10`;
+      if (status) url += `&status=${status}`;
+
+      const container = document.getElementById("orders-list");
+      container.innerHTML = '<p class="loading-text">Memuat pesanan...</p>';
+
+      try {
+        const res = await api("GET", url);
+        if (!res.data || res.data.length === 0) {
+          container.innerHTML = '<p class="empty-state">Tidak ada pesanan</p>';
+          document.getElementById("orders-pagination").innerHTML = "";
+          return;
+        }
+
+        container.innerHTML = res.data.map(o => `
+          <div class="order-card" onclick="viewOrderDetail('${esc(o.order_id)}')">
+            <div class="order-card-header">
+              <span class="order-id">${esc(o.order_id.substring(0, 8))}...</span>
+              <span class="status-badge status-${o.status}">${o.status}</span>
+            </div>
+            <div class="order-card-body">
+              <span>${(o.items || []).length} item</span>
+              <span class="order-total">${formatRp(o.total)}</span>
+            </div>
+            <div class="order-card-footer">
+              <span class="order-date">${formatDate(o.created_at)}</span>
+            </div>
+          </div>
+        `).join("");
+
+        renderPagination("orders-pagination", res.page, res.total_pages, (p) => loadOrders(p));
+      } catch (err) {
+        container.innerHTML = `<p class="error-state">Error: ${esc(err.message)}</p>`;
+      }
+    }
+
+    async function viewOrderDetail(orderId) {
+      const modal = document.getElementById("order-detail-modal");
+      const body = document.getElementById("order-detail-body");
+      body.innerHTML = '<p class="loading-text">Memuat detail...</p>';
+      modal.classList.remove("hidden");
+
+      try {
+        const o = await api("GET", `/orders/${orderId}`);
+        if (o.error) {
+          body.innerHTML = `<p class="error-state">${esc(o.error)}</p>`;
+          return;
+        }
+
+        body.innerHTML = `
+          <div class="detail-section">
+            <div class="detail-row"><span>Order ID</span><span class="monospace">${esc(o.order_id)}</span></div>
+            <div class="detail-row"><span>Status</span><span class="status-badge status-${o.status}">${o.status}</span></div>
+            <div class="detail-row"><span>Tanggal</span><span>${formatDate(o.created_at)}</span></div>
+            <div class="detail-row"><span>Pembayaran</span><span>${esc(o.payment_method || "-")}</span></div>
+            <div class="detail-row"><span>Alamat</span><span>${esc(o.customer_address || "-")}</span></div>
+          </div>
+          <h4>Item Pesanan</h4>
+          <div class="detail-items">
+            ${(o.items || []).map(item => `
+              <div class="detail-item">
+                <span>${esc(item.product_name)}</span>
+                <span>${item.qty}x ${formatRp(item.price)} = ${formatRp(item.subtotal)}</span>
+              </div>
+            `).join("")}
+          </div>
+          <div class="detail-section" style="margin-top:16px">
+            <div class="detail-row"><span>Subtotal</span><span>${formatRp(o.subtotal)}</span></div>
+            ${o.discount_amt ? `<div class="detail-row"><span>Diskon</span><span>-${formatRp(o.discount_amt)}</span></div>` : ""}
+            <div class="detail-row"><span>Ongkir</span><span>${formatRp(o.shipping_cost)}</span></div>
+            <div class="detail-row total"><span>Total</span><span>${formatRp(o.total)}</span></div>
+          </div>
+          ${o.notes ? `<p style="margin-top:12px;color:var(--text-muted)">Catatan: ${esc(o.notes)}</p>` : ""}
+        `;
+      } catch (err) {
+        body.innerHTML = `<p class="error-state">Gagal memuat detail: ${esc(err.message)}</p>`;
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("order-detail-modal").classList.add("hidden");
+    }
+
+    // -------------------------------------------
+    // ADMIN
+    // -------------------------------------------
+    async function loadAdminStats() {
+      const container = document.getElementById("admin-stats");
+      try {
+        const res = await api("GET", "/admin/stats");
+        if (res.error) {
+          container.innerHTML = `<p class="error-state">${esc(res.error)}</p>`;
+          return;
+        }
+        const s = res.summary || {};
+        container.innerHTML = `
+          <div class="stat-card"><div class="stat-value">${s.total_orders || 0}</div><div class="stat-label">Total Pesanan</div></div>
+          <div class="stat-card"><div class="stat-value">${formatRp(s.total_revenue || 0)}</div><div class="stat-label">Total Revenue</div></div>
+          <div class="stat-card"><div class="stat-value">${s.total_users || 0}</div><div class="stat-label">Total User</div></div>
+          <div class="stat-card"><div class="stat-value">${s.total_products || 0}</div><div class="stat-label">Produk Aktif</div></div>
+        `;
+      } catch (err) {
+        container.innerHTML = `<p class="error-state">Gagal memuat statistik</p>`;
+      }
+    }
+
+    let adminOrdersPage = 1;
+
+    async function loadAdminOrders(page) {
+      if (page) adminOrdersPage = page;
+      const container = document.getElementById("admin-orders-list");
+      try {
+        const res = await api("GET", `/orders?page=${adminOrdersPage}&limit=10`);
+        if (!res.data || res.data.length === 0) {
+          container.innerHTML = '<p class="empty-state">Tidak ada pesanan</p>';
+          return;
+        }
+        container.innerHTML = res.data.map(o => `
+          <div class="order-card">
+            <div class="order-card-header">
+              <span class="order-id" title="${esc(o.order_id)}">${esc(o.order_id.substring(0, 8))}...</span>
+              <span class="status-badge status-${o.status}">${o.status}</span>
+            </div>
+            <div class="order-card-body">
+              <span>${esc(o.customer_name || "")}</span>
+              <span class="order-total">${formatRp(o.total)}</span>
+            </div>
+            <div class="order-card-footer">
+              <span class="order-date">${formatDate(o.created_at)}</span>
+              <button class="btn btn-sm btn-outline" onclick="document.getElementById('admin-order-id').value='${esc(o.order_id)}'">Pilih</button>
+            </div>
+          </div>
+        `).join("");
+        renderPagination("admin-orders-pagination", res.page, res.total_pages, (p) => loadAdminOrders(p));
+      } catch (err) {
+        container.innerHTML = `<p class="error-state">Error: ${esc(err.message)}</p>`;
+      }
+    }
+
+    async function adminUpdateStatus() {
+      const orderId = document.getElementById("admin-order-id").value.trim();
+      const status = document.getElementById("admin-new-status").value;
+      const resultEl = document.getElementById("admin-update-result");
+
+      if (!orderId) { alert("Masukkan Order ID"); return; }
+
+      try {
+        const res = await api("PUT", `/orders/${orderId}/status`, { status });
+        if (res.error) {
+          resultEl.className = "alert alert-error";
+          resultEl.textContent = res.error;
+        } else {
+          resultEl.className = "alert alert-success";
+          resultEl.textContent = `Status pesanan ${orderId.substring(0, 8)}... berhasil diubah ke "${status}"`;
+          loadAdminOrders();
+        }
+        resultEl.classList.remove("hidden");
+      } catch (err) {
+        resultEl.className = "alert alert-error";
+        resultEl.textContent = "Gagal update: " + err.message;
+        resultEl.classList.remove("hidden");
+      }
+    }
+
+    // -------------------------------------------
+    // API HELPER
+    // -------------------------------------------
+    async function api(method, path, body) {
+      const opts = {
+        method,
+        headers: {}
+      };
+
+      if (authToken) {
+        opts.headers["Authorization"] = "Bearer " + authToken;
+      }
+
+      if (body) {
+        opts.headers["Content-Type"] = "application/json";
+        opts.body = JSON.stringify(body);
+      }
+
+      const res = await fetch(API_BASE + path, opts);
+
+      // Handle token expired
+      if (res.status === 401) {
+        const data = await res.json().catch(() => ({}));
+        if (data.error && data.error.toLowerCase().includes("expired")) {
+          alert("Sesi telah habis. Silakan login kembali.");
+          handleLogout();
+          return { error: "Token expired" };
+        }
+        return data;
+      }
+
+      return await res.json();
+    }
+
+    // -------------------------------------------
+    // UTILITIES
+    // -------------------------------------------
+    function formatRp(amount) {
+      return "Rp " + Number(amount || 0).toLocaleString("id-ID");
+    }
+
+    function formatDate(isoStr) {
+      if (!isoStr) return "-";
+      const d = new Date(isoStr);
+      return d.toLocaleDateString("id-ID", {
+        day: "numeric", month: "short", year: "numeric",
+        hour: "2-digit", minute: "2-digit"
+      });
+    }
+
+    function esc(str) {
+      if (!str) return "";
+      const div = document.createElement("div");
+      div.appendChild(document.createTextNode(String(str)));
+      return div.innerHTML;
+    }
+
+    function clearAlerts() {
+      document.querySelectorAll(".alert").forEach(el => el.classList.add("hidden"));
+    }
+
+    function showAlert(id, msg) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = msg;
+        el.classList.remove("hidden");
+      }
+    }
+
+    function renderPagination(containerId, currentPage, totalPages, onPageClick) {
+      const container = document.getElementById(containerId);
+      if (!container || totalPages <= 1) {
+        if (container) container.innerHTML = "";
+        return;
+      }
+
+      let html = "";
+      if (currentPage > 1) {
+        html += `<button class="page-btn" onclick="void(0)">&#8592;</button>`;
+      }
+
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, currentPage + 2);
+
+      for (let i = startPage; i <= endPage; i++) {
+        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}">${i}</button>`;
+      }
+
+      if (currentPage < totalPages) {
+        html += `<button class="page-btn">&#8594;</button>`;
+      }
+
+      container.innerHTML = html;
+
+      // Attach click handlers
+      container.querySelectorAll(".page-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const text = btn.textContent.trim();
+          if (text === "\u2190") onPageClick(currentPage - 1);
+          else if (text === "\u2192") onPageClick(currentPage + 1);
+          else {
+            const num = parseInt(text);
+            if (!isNaN(num)) onPageClick(num);
+          }
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>

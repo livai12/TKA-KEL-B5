@@ -1,0 +1,10 @@
+# Folder ini akan berisi screenshot hasil testing
+# - locust_rps.png
+# - locust_concurrency_sr50.png
+# - locust_concurrency_sr100.png
+# - locust_concurrency_sr200.png
+# - locust_concurrency_sr500.png
+# - cpu_usage_*.png
+# - postman_*.png
+# - frontend_*.png
+# - arsitektur.png
