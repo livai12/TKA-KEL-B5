@@ -9,9 +9,9 @@ set -e
 # ---------------------------------------------------------------------------
 # PLACEHOLDER VARIABLES - Replace with actual IPs before running!
 # ---------------------------------------------------------------------------
-APP_SERVER_1_IP="REPLACE_WITH_VM2_IP"
-APP_SERVER_2_IP="REPLACE_WITH_VM3_IP"
-APP_SERVER_3_IP="REPLACE_WITH_VM4_IP"
+APP_SERVER_1_IP="192.168.56.11"
+APP_SERVER_2_IP="192.168.56.12"
+APP_SERVER_3_IP="192.168.56.13"
 
 echo "=========================================="
 echo " Nginx Load Balancer + Frontend Setup - VM1"

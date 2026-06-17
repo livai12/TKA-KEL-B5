@@ -6,67 +6,113 @@
   <meta name="description" content="Order Processing Service - Final Project Teknologi Komputasi Awan" />
   <title>Order Processing Service</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
   <!-- ============================================ -->
-  <!-- AUTH SECTION                                  -->
+  <!-- BACKGROUND GRID & GLOWS                      -->
   <!-- ============================================ -->
-  <div id="auth-section" class="auth-container">
-    <div class="auth-card">
-      <div class="auth-header">
-        <h1>Order Processing Service</h1>
-        <p>Final Project Teknologi Komputasi Awan</p>
+  <div class="background-wrapper"></div>
+
+  <!-- ============================================ -->
+  <!-- LANDING / AUTH SECTION                        -->
+  <!-- ============================================ -->
+  <div id="auth-section" class="landing-page">
+    <!-- Navbar Header inside Landing -->
+    <header class="brand">
+      <span class="brand-logo">ORDERIFY</span>
+      <span class="brand-tag">TKA 26</span>
+    </header>
+
+    <div class="landing-grid">
+      <!-- Left Column: Hero Text + Form -->
+      <div class="landing-left">
+        <div class="hero-text">
+          <div class="hero-badge">High-Performance Distributed Order Processing</div>
+          <h1>E-Commerce Scale,<br>Orders that <span class="gradient-text">delegate</span></h1>
+          <p class="hero-desc">
+            Distributed order processing system utilizing high-performance asynchronous microservices, cluster load balancing, and low-latency database replication.
+          </p>
+        </div>
+
+        <!-- Glassmorphism Login/Register Card -->
+        <div class="auth-card glass-card">
+          <!-- Login Form -->
+          <form id="login-form" onsubmit="handleLogin(event)">
+            <h2>Sign In</h2>
+            <div class="form-group">
+              <label for="login-email">Email Address</label>
+              <input type="email" id="login-email" placeholder="e.g. user1@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" placeholder="Enter your password" required />
+            </div>
+            <button type="submit" class="btn btn-primary btn-glow btn-full" id="btn-login">Login to Dashboard</button>
+            <p class="auth-toggle">New to platform? <a href="#" onclick="toggleAuth(event)">Create an account</a></p>
+            <div id="login-error" class="alert alert-error hidden"></div>
+          </form>
+
+          <!-- Register Form -->
+          <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
+            <h2>Create Account</h2>
+            <div class="form-group">
+              <label for="reg-name">Full Name</label>
+              <input type="text" id="reg-name" placeholder="Enter full name" required />
+            </div>
+            <div class="form-group">
+              <label for="reg-email">Email Address</label>
+              <input type="email" id="reg-email" placeholder="active.email@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="reg-password">Password</label>
+              <input type="password" id="reg-password" placeholder="Min 6 characters" required minlength="6" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-city">City</label>
+                <input type="text" id="reg-city" placeholder="e.g. Surabaya" />
+              </div>
+              <div class="form-group">
+                <label for="reg-phone">Phone Number</label>
+                <input type="text" id="reg-phone" placeholder="08xxxxxxxxxx" />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-glow btn-full" id="btn-register">Register Account</button>
+            <p class="auth-toggle">Already have account? <a href="#" onclick="toggleAuth(event)">Sign In here</a></p>
+            <div id="register-error" class="alert alert-error hidden"></div>
+          </form>
+        </div>
       </div>
 
-      <!-- Login Form -->
-      <form id="login-form" onsubmit="handleLogin(event)">
-        <h2>Login</h2>
-        <div class="form-group">
-          <label for="login-email">Email</label>
-          <input type="email" id="login-email" placeholder="contoh: user1@example.com" required />
+      <!-- Right Column: Luminous Sakura Tree -->
+      <div class="landing-right">
+        <div class="sakura-tree-container">
+          <img src="glowing_sakura_tree.png" alt="Luminous Sakura Tree" class="sakura-tree-img" />
+          <div class="glow-orb"></div>
         </div>
-        <div class="form-group">
-          <label for="login-password">Password</label>
-          <input type="password" id="login-password" placeholder="Masukkan password" required />
-        </div>
-        <button type="submit" class="btn btn-primary btn-full" id="btn-login">Login</button>
-        <p class="auth-toggle">Belum punya akun? <a href="#" onclick="toggleAuth(event)">Daftar di sini</a></p>
-        <div id="login-error" class="alert alert-error hidden"></div>
-      </form>
-
-      <!-- Register Form -->
-      <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
-        <h2>Registrasi</h2>
-        <div class="form-group">
-          <label for="reg-name">Nama Lengkap</label>
-          <input type="text" id="reg-name" placeholder="Nama lengkap" required />
-        </div>
-        <div class="form-group">
-          <label for="reg-email">Email</label>
-          <input type="email" id="reg-email" placeholder="Email aktif" required />
-        </div>
-        <div class="form-group">
-          <label for="reg-password">Password</label>
-          <input type="password" id="reg-password" placeholder="Minimal 6 karakter" required minlength="6" />
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="reg-city">Kota</label>
-            <input type="text" id="reg-city" placeholder="Kota" />
-          </div>
-          <div class="form-group">
-            <label for="reg-phone">No. Telepon</label>
-            <input type="text" id="reg-phone" placeholder="08xxxxxxxxxx" />
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary btn-full" id="btn-register">Daftar</button>
-        <p class="auth-toggle">Sudah punya akun? <a href="#" onclick="toggleAuth(event)">Login di sini</a></p>
-        <div id="register-error" class="alert alert-error hidden"></div>
-      </form>
+      </div>
     </div>
+
+    <!-- Bottom Section: Statistics -->
+    <footer class="landing-footer">
+      <div class="stat-item">
+        <h3>10,000+</h3>
+        <p>orders processed</p>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <h3>99.99%</h3>
+        <p>system uptime</p>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <h3>&lt;10ms</h3>
+        <p>database latency</p>
+      </div>
+    </footer>
   </div>
 
   <!-- ============================================ -->
@@ -77,7 +123,7 @@
     <!-- Top Bar -->
     <header class="topbar">
       <div class="topbar-left">
-        <h1>Order Processing Service</h1>
+        <h1>ORDERIFY</h1>
       </div>
       <div class="topbar-right">
         <span id="user-info" class="user-badge"></span>
@@ -126,7 +172,9 @@
 
       <!-- TAB: Buat Pesanan -->
       <section id="tab-create-order" class="tab-panel hidden">
-        <h2>Buat Pesanan Baru</h2>
+        <div class="section-header">
+          <h2>Buat Pesanan Baru</h2>
+        </div>
         <div class="order-layout">
           <div class="order-form-section">
             <div class="card">
@@ -141,7 +189,7 @@
                 <label for="item-qty">Jumlah</label>
                 <input type="number" id="item-qty" min="1" value="1" />
               </div>
-              <button class="btn btn-secondary" onclick="addToCart()">Tambah ke Keranjang</button>
+              <button class="btn btn-secondary btn-glow btn-full" onclick="addToCart()">Tambah ke Keranjang</button>
             </div>
 
             <div class="card">
@@ -187,7 +235,7 @@
                 <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">Rp 0</span></div>
                 <div class="summary-row"><span>Ongkos Kirim</span><span id="cart-shipping">Rp 0</span></div>
                 <div class="summary-row total"><span>Total</span><span id="cart-total">Rp 0</span></div>
-                <button class="btn btn-primary btn-full" onclick="submitOrder()">Buat Pesanan</button>
+                <button class="btn btn-primary btn-glow btn-full" onclick="submitOrder()">Buat Pesanan</button>
               </div>
             </div>
             <div id="order-result" class="alert hidden"></div>
@@ -229,7 +277,9 @@
 
       <!-- TAB: Admin Panel -->
       <section id="tab-admin" class="tab-panel hidden">
-        <h2>Admin Panel</h2>
+        <div class="section-header">
+          <h2>Admin Panel</h2>
+        </div>
 
         <!-- Admin Stats -->
         <div id="admin-stats" class="stats-grid"></div>
@@ -251,7 +301,7 @@
               </select>
             </div>
             <div class="form-group" style="flex:0; align-self:flex-end">
-              <button class="btn btn-primary" onclick="adminUpdateStatus()">Update</button>
+              <button class="btn btn-primary btn-glow" onclick="adminUpdateStatus()">Update</button>
             </div>
           </div>
           <div id="admin-update-result" class="alert hidden"></div>
@@ -295,7 +345,27 @@
       if (authToken && currentUser) {
         showApp();
       }
+      createPetals();
     });
+
+    // -------------------------------------------
+    // BACKGROUND ANIMATION (FALLING PETALS)
+    // -------------------------------------------
+    function createPetals() {
+      const container = document.body;
+      const petalCount = 25;
+      for (let i = 0; i < petalCount; i++) {
+        const petal = document.createElement("div");
+        petal.className = "petal";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.top = Math.random() * -50 + "px";
+        petal.style.width = Math.random() * 8 + 8 + "px";
+        petal.style.height = Math.random() * 8 + 8 + "px";
+        petal.style.animationDuration = Math.random() * 10 + 8 + "s";
+        petal.style.animationDelay = Math.random() * 8 + "s";
+        container.appendChild(petal);
+      }
+    }
 
     // -------------------------------------------
     // AUTH
@@ -332,7 +402,7 @@
         showAlert("login-error", "Gagal terhubung ke server: " + err.message);
       } finally {
         btn.disabled = false;
-        btn.textContent = "Login";
+        btn.textContent = "Login ke Dashboard";
       }
     }
 
@@ -366,7 +436,7 @@
         showAlert("register-error", "Gagal terhubung ke server: " + err.message);
       } finally {
         btn.disabled = false;
-        btn.textContent = "Daftar";
+        btn.textContent = "Register Account";
       }
     }
 
@@ -651,7 +721,7 @@
             <div class="detail-row"><span>Pembayaran</span><span>${esc(o.payment_method || "-")}</span></div>
             <div class="detail-row"><span>Alamat</span><span>${esc(o.customer_address || "-")}</span></div>
           </div>
-          <h4>Item Pesanan</h4>
+          <h4 style="margin-top:20px;margin-bottom:10px;font-weight:700;">Item Pesanan</h4>
           <div class="detail-items">
             ${(o.items || []).map(item => `
               <div class="detail-item">
@@ -660,13 +730,13 @@
               </div>
             `).join("")}
           </div>
-          <div class="detail-section" style="margin-top:16px">
+          <div class="detail-section" style="margin-top:20px">
             <div class="detail-row"><span>Subtotal</span><span>${formatRp(o.subtotal)}</span></div>
             ${o.discount_amt ? `<div class="detail-row"><span>Diskon</span><span>-${formatRp(o.discount_amt)}</span></div>` : ""}
             <div class="detail-row"><span>Ongkir</span><span>${formatRp(o.shipping_cost)}</span></div>
             <div class="detail-row total"><span>Total</span><span>${formatRp(o.total)}</span></div>
           </div>
-          ${o.notes ? `<p style="margin-top:12px;color:var(--text-muted)">Catatan: ${esc(o.notes)}</p>` : ""}
+          ${o.notes ? `<p style="margin-top:16px;color:var(--text-secondary)">Catatan: ${esc(o.notes)}</p>` : ""}
         `;
       } catch (err) {
         body.innerHTML = `<p class="error-state">Gagal memuat detail: ${esc(err.message)}</p>`;

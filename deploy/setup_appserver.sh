@@ -9,7 +9,7 @@ set -e
 # ---------------------------------------------------------------------------
 # PLACEHOLDER VARIABLES - Fill these in before running!
 # ---------------------------------------------------------------------------
-MONGO_URI="mongodb://MONGODB_IP:27017/"
+MONGO_URI="mongodb://192.168.56.14:27017/"
 JWT_SECRET="ganti-ini-di-production-dengan-string-acak-panjang"
 
 # Application settings
