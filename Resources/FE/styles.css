@@ -1,14 +1,14 @@
 /* ===========================================================================
-   DESIGN SYSTEM - PREMIUM DARK GLOW THEME (EXOTIC)
+   DESIGN SYSTEM - PREMIUM DARK SPACE THEME WITH AMBIENT VIDEO
    =========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
 
 :root {
   /* Colors */
-  --bg-space: #030014;
-  --bg-app: #07031d;
-  --bg-card: rgba(13, 9, 41, 0.45);
-  --bg-card-hover: rgba(21, 14, 61, 0.6);
+  --bg-space: #000000;
+  --bg-app: #050212;
+  --bg-card: rgba(13, 9, 41, 0.65);
+  --bg-card-hover: rgba(21, 14, 61, 0.85);
   --bg-input: rgba(255, 255, 255, 0.03);
   --bg-input-focus: rgba(255, 255, 255, 0.07);
   --bg-hover: rgba(172, 115, 255, 0.08);
@@ -19,7 +19,7 @@
 
   --accent: #ac73ff;
   --accent-glow: rgba(172, 115, 255, 0.45);
-  --accent-soft: rgba(172, 115, 255, 0.1);
+  --accent-soft: rgba(172, 115, 255, 0.15);
   --primary-glow: linear-gradient(135deg, #ac73ff, #6c8cff);
 
   --success: #10b981;
@@ -77,50 +77,93 @@ body {
   background: var(--accent);
 }
 
-/* Background Grid & Radial Glow */
-.background-wrapper {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  background-image: 
-    radial-gradient(circle at 70% 30%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 20% 70%, rgba(108, 140, 255, 0.15) 0%, transparent 50%),
-    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 50px 50px, 50px 50px;
-  pointer-events: none;
-}
-
 /* ===========================================================================
-   LANDING PAGE LAYOUT
+   LANDING / AUTH HERO PAGE (EXOTIC CHERRY BLOSSOM)
    =========================================================================== */
 .landing-page {
+  position: relative;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   justify-content: space-between;
   padding: 40px 80px;
+  background: #000;
+  overflow: hidden;
 }
 
-.landing-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 60px;
-  align-items: center;
-  margin-top: 20px;
+/* Background Ambient Video */
+.hero-video-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-/* Left Column */
-.landing-left {
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.85;
+}
+
+.video-overlay-left {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.1) 100%);
+  z-index: 1;
+}
+
+.video-overlay-bottom {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.7) 100%);
+  z-index: 1;
+}
+
+/* Subtle grid lines */
+.hero-grid-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.12;
+}
+
+.grid-line-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.grid-line-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Navbar Header inside Landing */
+.landing-navbar {
+  position: relative;
+  z-index: 10;
   display: flex;
-  flex-direction: column;
-  gap: 32px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 0;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .brand-logo {
@@ -144,6 +187,61 @@ body {
   text-transform: uppercase;
 }
 
+.nav-links {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition);
+  letter-spacing: 0.3px;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #fff;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-signin-link {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.nav-signin-link:hover {
+  color: #fff;
+}
+
+.btn-pill {
+  border-radius: 9999px !important;
+}
+
+/* Content Left Aligned */
+.landing-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 650px; /* Restrict content to left side, leaving right side for video sakura tree */
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .hero-text {
   display: flex;
   flex-direction: column;
@@ -152,21 +250,30 @@ body {
 
 .hero-badge {
   align-self: flex-start;
-  font-size: 0.8rem;
-  color: #fb7185;
-  background: rgba(251, 113, 133, 0.08);
-  border: 1px solid rgba(251, 113, 133, 0.2);
-  padding: 6px 14px;
-  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
   font-weight: 500;
-  letter-spacing: 0.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.hero-badge::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .hero-text h1 {
-  font-size: 3.2rem;
+  font-size: 3.6rem;
   font-weight: 800;
-  line-height: 1.15;
+  line-height: 1.05;
   letter-spacing: -1px;
+  color: #fff;
 }
 
 .gradient-text {
@@ -175,6 +282,7 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shine 6s linear infinite;
+  display: inline-block;
 }
 
 @keyframes shine {
@@ -182,37 +290,37 @@ body {
 }
 
 .hero-desc {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 1.05rem;
-  max-width: 550px;
   line-height: 1.6;
 }
 
-/* Glassmorphism Auth Card */
+/* Glassmorphism Auth Modal Card */
 .glass-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(13, 9, 41, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  transition: transform var(--transition), border-color var(--transition);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  transition: border-color var(--transition);
 }
 
 .glass-card:hover {
-  border-color: rgba(172, 115, 255, 0.25);
+  border-color: rgba(172, 115, 255, 0.35);
 }
 
 .auth-card {
-  padding: 32px;
-  max-width: 460px;
+  padding: 40px;
+  width: 100%;
 }
 
 .auth-card h2 {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 24px;
   letter-spacing: -0.5px;
+  color: #fff;
 }
 
 .auth-toggle {
@@ -234,72 +342,17 @@ body {
   text-decoration: underline;
 }
 
-/* Right Column: Luminous Sakura Tree */
-.landing-right {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.sakura-tree-container {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  animation: float 8s ease-in-out infinite;
-}
-
-.sakura-tree-img {
-  width: 100%;
-  height: auto;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 0 40px rgba(236, 72, 153, 0.15);
-}
-
-.glow-orb {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.25) 0%, transparent 70%);
-  z-index: -1;
-  filter: blur(20px);
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
-  100% { transform: translateY(0px); }
-}
-
-/* Falling Petals */
-.petal {
-  position: absolute;
-  background: linear-gradient(135deg, #ff7eb9, #ff65a3);
-  border-radius: 150% 0 150% 150%;
-  opacity: 0.6;
-  pointer-events: none;
-  z-index: -1;
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  0% { transform: translate(0, -10px) rotate(0deg) scale(0.5); opacity: 0; }
-  10% { opacity: 0.7; }
-  90% { opacity: 0.7; }
-  100% { transform: translate(150px, 105vh) rotate(540deg) scale(1); opacity: 0; }
-}
-
 /* Landing Footer Stats */
 .landing-footer {
+  position: relative;
+  z-index: 10;
   display: flex;
   align-items: center;
   gap: 50px;
-  margin-top: 60px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 28px;
+  max-width: 650px;
+  width: 100%;
 }
 
 .stat-item {
@@ -406,7 +459,7 @@ textarea {
   gap: 8px;
   padding: 12px 24px;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 30px; /* Pill buttons like in the reference */
   font-size: 0.9rem;
   font-weight: 600;
   font-family: var(--font);
@@ -418,7 +471,7 @@ textarea {
 
 .btn-primary {
   background: #fff;
-  color: #030014;
+  color: #000;
 }
 
 .btn-primary:hover {
@@ -462,7 +515,7 @@ textarea {
 }
 
 .btn-sm {
-  padding: 8px 16px;
+  padding: 8px 20px;
   font-size: 0.82rem;
 }
 
@@ -484,6 +537,7 @@ textarea {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--bg-app);
 }
 
 /* Top Bar */
@@ -492,7 +546,7 @@ textarea {
   align-items: center;
   justify-content: space-between;
   padding: 20px 40px;
-  background: rgba(3, 0, 20, 0.8);
+  background: rgba(3, 0, 20, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -529,7 +583,7 @@ textarea {
   display: flex;
   gap: 8px;
   padding: 8px 40px 0 40px;
-  background: rgba(3, 0, 20, 0.8);
+  background: rgba(3, 0, 20, 0.85);
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
 }
@@ -940,7 +994,7 @@ textarea {
 }
 
 /* ===========================================================================
-   MODALS
+   MODALS (POPUP LOGIN & DETAIL)
    =========================================================================== */
 .modal {
   position: fixed;
@@ -959,9 +1013,9 @@ textarea {
 .modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(3, 0, 20, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(3, 0, 20, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .modal-content {
@@ -970,10 +1024,10 @@ textarea {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   max-height: 85vh;
   overflow-y: auto;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
   z-index: 10;
 }
 
@@ -989,6 +1043,7 @@ textarea {
   font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: -0.3px;
+  color: #fff;
 }
 
 .btn-close {
@@ -1097,7 +1152,7 @@ textarea {
 }
 
 /* ===========================================================================
-   ALERTS & PLACES
+   ALERTS & STATUS
    =========================================================================== */
 .alert {
   padding: 16px 20px;
@@ -1141,16 +1196,14 @@ textarea {
 @media (max-width: 1024px) {
   .landing-page {
     padding: 30px 40px;
+    height: auto;
+    min-height: 100vh;
   }
-  .landing-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
+  .landing-content {
+    max-width: 100%;
   }
-  .landing-right {
-    order: -1;
-  }
-  .sakura-tree-container {
-    max-width: 320px;
+  .landing-footer {
+    max-width: 100%;
   }
   .order-layout {
     grid-template-columns: 1fr;

@@ -7,41 +7,107 @@
   <title>Order Processing Service</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2.2" />
 </head>
 <body>
-
-  <!-- ============================================ -->
-  <!-- BACKGROUND GRID & GLOWS                      -->
-  <!-- ============================================ -->
-  <div class="background-wrapper"></div>
 
   <!-- ============================================ -->
   <!-- LANDING / AUTH SECTION                        -->
   <!-- ============================================ -->
   <div id="auth-section" class="landing-page">
-    <!-- Navbar Header inside Landing -->
-    <header class="brand">
-      <span class="brand-logo">ORDERIFY</span>
-      <span class="brand-tag">TKA 26</span>
+    
+    <!-- Ambient Background Video -->
+    <div class="hero-video-container">
+      <video autoplay muted loop playsinline class="hero-video">
+        <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bg-hero-0BnFGdr81Ifnj3WbBZoNt1KE4D5DMT.mp4" type="video/mp4" />
+      </video>
+      <div class="video-overlay-left"></div>
+      <div class="video-overlay-bottom"></div>
+    </div>
+
+    <!-- Subtle Grid Overlay -->
+    <div class="hero-grid-lines">
+      <div class="grid-line-h" style="top: 12.5%"></div>
+      <div class="grid-line-h" style="top: 25%"></div>
+      <div class="grid-line-h" style="top: 37.5%"></div>
+      <div class="grid-line-h" style="top: 50%"></div>
+      <div class="grid-line-h" style="top: 62.5%"></div>
+      <div class="grid-line-h" style="top: 75%"></div>
+      <div class="grid-line-h" style="top: 87.5%"></div>
+      <div class="grid-line-v" style="left: 8.33%"></div>
+      <div class="grid-line-v" style="left: 16.66%"></div>
+      <div class="grid-line-v" style="left: 25%"></div>
+      <div class="grid-line-v" style="left: 33.33%"></div>
+      <div class="grid-line-v" style="left: 41.66%"></div>
+      <div class="grid-line-v" style="left: 50%"></div>
+      <div class="grid-line-v" style="left: 58.33%"></div>
+      <div class="grid-line-v" style="left: 66.66%"></div>
+      <div class="grid-line-v" style="left: 75%"></div>
+      <div class="grid-line-v" style="left: 83.33%"></div>
+      <div class="grid-line-v" style="left: 91.66%"></div>
+    </div>
+
+    <!-- Brand Header / Navbar -->
+    <header class="landing-navbar">
+      <div class="brand">
+        <span class="brand-logo">ORDERIFY</span>
+        <span class="brand-tag">TKA 26</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#" class="active" onclick="event.preventDefault()">Capabilities</a>
+        <a href="#" onclick="event.preventDefault()">Process</a>
+        <a href="#" onclick="event.preventDefault()">Infra</a>
+        <a href="#" onclick="event.preventDefault()">Integrations</a>
+        <a href="#" onclick="event.preventDefault()">Security</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="#" class="nav-signin-link" onclick="toggleAuthModal(true, 'login'); event.preventDefault();">Sign in</a>
+        <button class="btn btn-primary btn-sm btn-pill" onclick="toggleAuthModal(true, 'register')">Deploy agent</button>
+      </div>
     </header>
 
-    <div class="landing-grid">
-      <!-- Left Column: Hero Text + Form -->
-      <div class="landing-left">
-        <div class="hero-text">
-          <div class="hero-badge">High-Performance Distributed Order Processing</div>
-          <h1>E-Commerce Scale,<br>Orders that <span class="gradient-text">delegate</span></h1>
-          <p class="hero-desc">
-            Distributed order processing system utilizing high-performance asynchronous microservices, cluster load balancing, and low-latency database replication.
-          </p>
-        </div>
+    <!-- Main Landing Content (Left Column) -->
+    <div class="landing-content">
+      <div class="hero-text">
+        <div class="hero-badge">High-Performance E-Commerce Processing</div>
+        <h1>E-Commerce Scale,<br>Orders that <span class="gradient-text">delegate</span></h1>
+        <p class="hero-desc">
+          Distributed order processing system utilizing high-performance asynchronous microservices, cluster load balancing, and low-latency database replication.
+        </p>
+      </div>
+    </div>
 
-        <!-- Glassmorphism Login/Register Card -->
-        <div class="auth-card glass-card">
+    <!-- Bottom Section: Statistics -->
+
+    <!-- Bottom Section: Statistics -->
+    <footer class="landing-footer">
+      <div class="stat-item">
+        <h3>10,000+</h3>
+        <p>orders processed</p>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <h3>99.99%</h3>
+        <p>system uptime</p>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <h3>&lt;10ms</h3>
+        <p>database latency</p>
+      </div>
+    </footer>
+
+    <!-- Auth Modal Popup -->
+    <div id="auth-modal" class="modal hidden">
+      <div class="modal-backdrop" onclick="toggleAuthModal(false)"></div>
+      <div class="modal-content glass-card">
+        <div class="modal-header">
+          <h3 id="auth-modal-title">Sign In</h3>
+          <button class="btn-close" onclick="toggleAuthModal(false)">&times;</button>
+        </div>
+        <div class="modal-body">
           <!-- Login Form -->
           <form id="login-form" onsubmit="handleLogin(event)">
-            <h2>Sign In</h2>
             <div class="form-group">
               <label for="login-email">Email Address</label>
               <input type="email" id="login-email" placeholder="e.g. user1@example.com" required />
@@ -57,7 +123,6 @@
 
           <!-- Register Form -->
           <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
-            <h2>Create Account</h2>
             <div class="form-group">
               <label for="reg-name">Full Name</label>
               <input type="text" id="reg-name" placeholder="Enter full name" required />
@@ -86,33 +151,7 @@
           </form>
         </div>
       </div>
-
-      <!-- Right Column: Luminous Sakura Tree -->
-      <div class="landing-right">
-        <div class="sakura-tree-container">
-          <img src="glowing_sakura_tree.png" alt="Luminous Sakura Tree" class="sakura-tree-img" />
-          <div class="glow-orb"></div>
-        </div>
-      </div>
     </div>
-
-    <!-- Bottom Section: Statistics -->
-    <footer class="landing-footer">
-      <div class="stat-item">
-        <h3>10,000+</h3>
-        <p>orders processed</p>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <h3>99.99%</h3>
-        <p>system uptime</p>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <h3>&lt;10ms</h3>
-        <p>database latency</p>
-      </div>
-    </footer>
   </div>
 
   <!-- ============================================ -->
@@ -345,35 +384,48 @@
       if (authToken && currentUser) {
         showApp();
       }
-      createPetals();
     });
-
-    // -------------------------------------------
-    // BACKGROUND ANIMATION (FALLING PETALS)
-    // -------------------------------------------
-    function createPetals() {
-      const container = document.body;
-      const petalCount = 25;
-      for (let i = 0; i < petalCount; i++) {
-        const petal = document.createElement("div");
-        petal.className = "petal";
-        petal.style.left = Math.random() * 100 + "vw";
-        petal.style.top = Math.random() * -50 + "px";
-        petal.style.width = Math.random() * 8 + 8 + "px";
-        petal.style.height = Math.random() * 8 + 8 + "px";
-        petal.style.animationDuration = Math.random() * 10 + 8 + "s";
-        petal.style.animationDelay = Math.random() * 8 + "s";
-        container.appendChild(petal);
-      }
-    }
 
     // -------------------------------------------
     // AUTH
     // -------------------------------------------
+    function toggleAuthModal(show, type) {
+      const modal = document.getElementById("auth-modal");
+      if (show) {
+        modal.classList.remove("hidden");
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+        const title = document.getElementById("auth-modal-title");
+        if (type === 'register') {
+          loginForm.classList.add("hidden");
+          registerForm.classList.remove("hidden");
+          title.textContent = "Create Account";
+        } else {
+          loginForm.classList.remove("hidden");
+          registerForm.classList.add("hidden");
+          title.textContent = "Sign In";
+        }
+      } else {
+        modal.classList.add("hidden");
+      }
+      clearAlerts();
+    }
+
     function toggleAuth(e) {
-      e.preventDefault();
-      document.getElementById("login-form").classList.toggle("hidden");
-      document.getElementById("register-form").classList.toggle("hidden");
+      if (e) e.preventDefault();
+      const loginForm = document.getElementById("login-form");
+      const registerForm = document.getElementById("register-form");
+      const title = document.getElementById("auth-modal-title");
+
+      if (loginForm.classList.contains("hidden")) {
+        loginForm.classList.remove("hidden");
+        registerForm.classList.add("hidden");
+        title.textContent = "Sign In";
+      } else {
+        loginForm.classList.add("hidden");
+        registerForm.classList.remove("hidden");
+        title.textContent = "Create Account";
+      }
       clearAlerts();
     }
 
@@ -402,7 +454,7 @@
         showAlert("login-error", "Gagal terhubung ke server: " + err.message);
       } finally {
         btn.disabled = false;
-        btn.textContent = "Login ke Dashboard";
+        btn.textContent = "Login to Dashboard";
       }
     }
 
@@ -452,6 +504,7 @@
     }
 
     function showApp() {
+      toggleAuthModal(false);
       document.getElementById("auth-section").classList.add("hidden");
       document.getElementById("app-section").classList.remove("hidden");
       document.getElementById("user-info").textContent =
@@ -869,6 +922,14 @@
       return "Rp " + Number(amount || 0).toLocaleString("id-ID");
     }
 
+    // Escape HTML Helper
+    function esc(str) {
+      if (!str) return "";
+      const div = document.createElement("div");
+      div.appendChild(document.createTextNode(String(str)));
+      return div.innerHTML;
+    }
+
     function formatDate(isoStr) {
       if (!isoStr) return "-";
       const d = new Date(isoStr);
@@ -876,13 +937,6 @@
         day: "numeric", month: "short", year: "numeric",
         hour: "2-digit", minute: "2-digit"
       });
-    }
-
-    function esc(str) {
-      if (!str) return "";
-      const div = document.createElement("div");
-      div.appendChild(document.createTextNode(String(str)));
-      return div.innerHTML;
     }
 
     function clearAlerts() {
