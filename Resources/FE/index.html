@@ -7,7 +7,7 @@
   <title>Order Processing Service</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=2.2" />
+  <link rel="stylesheet" href="styles.css?v=2.3" />
 </head>
 <body>
 
@@ -61,8 +61,8 @@
         <a href="#" onclick="event.preventDefault()">Security</a>
       </nav>
       <div class="nav-actions">
-        <a href="#" class="nav-signin-link" onclick="toggleAuthModal(true, 'login'); event.preventDefault();">Sign in</a>
-        <button class="btn btn-primary btn-sm btn-pill" onclick="toggleAuthModal(true, 'register')">Deploy agent</button>
+        <a href="#" class="nav-signin-link" onclick="focusLogin(event)">Sign in</a>
+        <button class="btn btn-primary btn-sm btn-pill" onclick="focusLogin(event)">Deploy agent</button>
       </div>
     </header>
 
@@ -75,9 +75,56 @@
           Distributed order processing system utilizing high-performance asynchronous microservices, cluster load balancing, and low-latency database replication.
         </p>
       </div>
-    </div>
 
-    <!-- Bottom Section: Statistics -->
+      <!-- Transparent Inline Auth Container -->
+      <div class="auth-container-inline">
+        <!-- Login Form -->
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #fff;">Sign In</h2>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="login-email" style="font-size: 0.7rem;">Email Address</label>
+            <input type="email" id="login-email" placeholder="e.g. user1@example.com" required style="padding: 10px 14px; font-size: 0.9rem;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="login-password" style="font-size: 0.7rem;">Password</label>
+            <input type="password" id="login-password" placeholder="Enter your password" required style="padding: 10px 14px; font-size: 0.9rem;" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-glow btn-full" id="btn-login" style="padding: 10px 20px; font-size: 0.88rem;">Login to Dashboard</button>
+          <p class="auth-toggle" style="margin-top: 12px; font-size: 0.8rem;">New to platform? <a href="#" onclick="toggleAuth(event)">Create an account</a></p>
+          <div id="login-error" class="alert alert-error hidden"></div>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
+          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #fff;">Create Account</h2>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="reg-name" style="font-size: 0.7rem;">Full Name</label>
+            <input type="text" id="reg-name" placeholder="Enter full name" required style="padding: 10px 14px; font-size: 0.9rem;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="reg-email" style="font-size: 0.7rem;">Email Address</label>
+            <input type="email" id="reg-email" placeholder="active.email@example.com" required style="padding: 10px 14px; font-size: 0.9rem;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="reg-password" style="font-size: 0.7rem;">Password</label>
+            <input type="password" id="reg-password" placeholder="Min 6 characters" required minlength="6" style="padding: 10px 14px; font-size: 0.9rem;" />
+          </div>
+          <div class="form-row" style="margin-bottom: 16px;">
+            <div class="form-group" style="flex:1; margin-bottom:0;">
+              <label for="reg-city" style="font-size: 0.7rem;">City</label>
+              <input type="text" id="reg-city" placeholder="e.g. Surabaya" style="padding: 10px 14px; font-size: 0.9rem;" />
+            </div>
+            <div class="form-group" style="flex:1; margin-bottom:0;">
+              <label for="reg-phone" style="font-size: 0.7rem;">Phone</label>
+              <input type="text" id="reg-phone" placeholder="08xxxxxxxxxx" style="padding: 10px 14px; font-size: 0.9rem;" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-glow btn-full" id="btn-register" style="padding: 10px 20px; font-size: 0.88rem;">Register Account</button>
+          <p class="auth-toggle" style="margin-top: 12px; font-size: 0.8rem;">Already have account? <a href="#" onclick="toggleAuth(event)">Sign In here</a></p>
+          <div id="register-error" class="alert alert-error hidden"></div>
+        </form>
+      </div>
+    </div>
 
     <!-- Bottom Section: Statistics -->
     <footer class="landing-footer">
@@ -96,63 +143,6 @@
         <p>database latency</p>
       </div>
     </footer>
-
-    <!-- Auth Modal Popup -->
-    <div id="auth-modal" class="modal hidden">
-      <div class="modal-backdrop" onclick="toggleAuthModal(false)"></div>
-      <div class="modal-content glass-card">
-        <div class="modal-header">
-          <h3 id="auth-modal-title">Sign In</h3>
-          <button class="btn-close" onclick="toggleAuthModal(false)">&times;</button>
-        </div>
-        <div class="modal-body">
-          <!-- Login Form -->
-          <form id="login-form" onsubmit="handleLogin(event)">
-            <div class="form-group">
-              <label for="login-email">Email Address</label>
-              <input type="email" id="login-email" placeholder="e.g. user1@example.com" required />
-            </div>
-            <div class="form-group">
-              <label for="login-password">Password</label>
-              <input type="password" id="login-password" placeholder="Enter your password" required />
-            </div>
-            <button type="submit" class="btn btn-primary btn-glow btn-full" id="btn-login">Login to Dashboard</button>
-            <p class="auth-toggle">New to platform? <a href="#" onclick="toggleAuth(event)">Create an account</a></p>
-            <div id="login-error" class="alert alert-error hidden"></div>
-          </form>
-
-          <!-- Register Form -->
-          <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
-            <div class="form-group">
-              <label for="reg-name">Full Name</label>
-              <input type="text" id="reg-name" placeholder="Enter full name" required />
-            </div>
-            <div class="form-group">
-              <label for="reg-email">Email Address</label>
-              <input type="email" id="reg-email" placeholder="active.email@example.com" required />
-            </div>
-            <div class="form-group">
-              <label for="reg-password">Password</label>
-              <input type="password" id="reg-password" placeholder="Min 6 characters" required minlength="6" />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="reg-city">City</label>
-                <input type="text" id="reg-city" placeholder="e.g. Surabaya" />
-              </div>
-              <div class="form-group">
-                <label for="reg-phone">Phone Number</label>
-                <input type="text" id="reg-phone" placeholder="08xxxxxxxxxx" />
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-glow btn-full" id="btn-register">Register Account</button>
-            <p class="auth-toggle">Already have account? <a href="#" onclick="toggleAuth(event)">Sign In here</a></p>
-            <div id="register-error" class="alert alert-error hidden"></div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- ============================================ -->
   <!-- MAIN APPLICATION                              -->
@@ -389,42 +379,26 @@
     // -------------------------------------------
     // AUTH
     // -------------------------------------------
-    function toggleAuthModal(show, type) {
-      const modal = document.getElementById("auth-modal");
-      if (show) {
-        modal.classList.remove("hidden");
-        const loginForm = document.getElementById("login-form");
-        const registerForm = document.getElementById("register-form");
-        const title = document.getElementById("auth-modal-title");
-        if (type === 'register') {
-          loginForm.classList.add("hidden");
-          registerForm.classList.remove("hidden");
-          title.textContent = "Create Account";
-        } else {
-          loginForm.classList.remove("hidden");
-          registerForm.classList.add("hidden");
-          title.textContent = "Sign In";
-        }
-      } else {
-        modal.classList.add("hidden");
+    function focusLogin(e) {
+      if (e) e.preventDefault();
+      const emailInput = document.getElementById("login-email");
+      if (emailInput) {
+        emailInput.scrollIntoView({ behavior: 'smooth' });
+        emailInput.focus();
       }
-      clearAlerts();
     }
 
     function toggleAuth(e) {
       if (e) e.preventDefault();
       const loginForm = document.getElementById("login-form");
       const registerForm = document.getElementById("register-form");
-      const title = document.getElementById("auth-modal-title");
 
       if (loginForm.classList.contains("hidden")) {
         loginForm.classList.remove("hidden");
         registerForm.classList.add("hidden");
-        title.textContent = "Sign In";
       } else {
         loginForm.classList.add("hidden");
         registerForm.classList.remove("hidden");
-        title.textContent = "Create Account";
       }
       clearAlerts();
     }
@@ -504,7 +478,6 @@
     }
 
     function showApp() {
-      toggleAuthModal(false);
       document.getElementById("auth-section").classList.add("hidden");
       document.getElementById("app-section").classList.remove("hidden");
       document.getElementById("user-info").textContent =
