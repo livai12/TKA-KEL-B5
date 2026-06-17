@@ -275,9 +275,13 @@ body {
 }
 
 .gradient-text {
-  color: #ffffff;
-  font-weight: 800;
+  background: linear-gradient(90deg, #ff7eb9, #ff758c, #ac73ff, #6c8cff, #82ffb0);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 6s linear infinite;
   display: inline-block;
+  transition: opacity 0.3s ease-in-out;
 }
 
 @keyframes shine {

@@ -7,7 +7,7 @@
   <title>Order Processing Service</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=2.4" />
+  <link rel="stylesheet" href="styles.css?v=2.5" />
 </head>
 <body>
 
@@ -70,7 +70,7 @@
     <div class="landing-content">
       <div class="hero-text">
         <div class="hero-badge">High-Performance E-Commerce Processing</div>
-        <h1>E-Commerce Scale,<br>Orders that <span class="gradient-text">delegate</span></h1>
+        <h1>E-Commerce Scale,<br>Orders that <span id="dynamic-word" class="gradient-text">delegate</span></h1>
         <p class="hero-desc">
           Distributed order processing system utilizing high-performance asynchronous microservices, cluster load balancing, and low-latency database replication.
         </p>
@@ -373,6 +373,21 @@
     document.addEventListener("DOMContentLoaded", () => {
       if (authToken && currentUser) {
         showApp();
+      }
+
+      // Word Rotator for Landing Heading
+      const words = ["delegate", "execute", "scale", "automate"];
+      let wordIndex = 0;
+      const wordEl = document.getElementById("dynamic-word");
+      if (wordEl) {
+        setInterval(() => {
+          wordEl.style.opacity = "0";
+          setTimeout(() => {
+            wordIndex = (wordIndex + 1) % words.length;
+            wordEl.textContent = words[wordIndex];
+            wordEl.style.opacity = "1";
+          }, 300);
+        }, 3000);
       }
     });
 
