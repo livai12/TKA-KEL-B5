@@ -1,4 +1,4 @@
-# Laporan Final Project Teknologi Komputasi Awan - Kelompok 26
+# Laporan Final Project Teknologi Komputasi Awan - Kelompok 5
 
 ## Anggota Kelompok
 
