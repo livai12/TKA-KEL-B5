@@ -3,14 +3,14 @@
 ## Anggota Kelompok
 
 | No | Nama | NRP |
-|----|------|-----|
-| 1  | [Nama Anggota 1] | [NRP Anggota 1] |
-| 2  | [Nama Anggota 2] | [NRP Anggota 2] |
-| 3  | [Nama Anggota 3] | [NRP Anggota 3] |
-| 4  | [Nama Anggota 4] | [NRP Anggota 4] |
-| 5  | [Nama Anggota 5] | [NRP Anggota 5] |
-| 6  | [Nama Anggota 6] | [NRP Anggota 6] |
-| 7  | [Nama Anggota 7] | [NRP Anggota 7] |
+|:---:|---|---|
+| 1 | Nabilah Anindya Paramesti | 5027241006 |
+| 2 | Mochkamad Maulana Syafaat | 5027241021 |
+| 3 | Zein Muhammad Hasan | 5027241035 |
+| 4 | Khumaidi Kharis Az-zacky | 5027241049 |
+| 5 | Dimas Muhammad Putra | 5027241076 |
+| 6 | Jofanka Al-kautsar Pangestu Abady | 5027241107 |
+| 7 | Naufal Ardhana | 5027241118 |
 
 ---
 
