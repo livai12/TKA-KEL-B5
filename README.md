@@ -73,7 +73,7 @@ Sistem dibagi ke dalam 5 VM dengan pembagian host fisik untuk simulasi lokal:
 | 4  | VM4 | Database Server (MongoDB) | vm5 | 2 vCPU | 4 GB | 34.68 US$ | Komputer A |
 | **Total** | | | | | | **77.39 US$** | |
 
-* **Total Penggunaan Anggaran**: 64 US$ / bulan (Masih di bawah batas maksimal 75 US$, menghemat 11 US$).
+
 
 ### 2.3 Rencana Skalabilitas & Desain Jaringan
 Untuk pengujian awal atau pengembangan, seluruh VM (VM1 hingga VM5) dideploy pada **1 komputer fisik**.
