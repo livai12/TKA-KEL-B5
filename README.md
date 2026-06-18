@@ -67,12 +67,11 @@ Sistem dibagi ke dalam 5 VM dengan pembagian host fisik untuk simulasi lokal:
 
 | No | VM | Peran | Tipe VM | CPU | Memory | Biaya Bulanan | Host Fisik |
 |----|----|-------|---------|-----|--------|---------------|------------|
-| 1  | VM1 | Load Balancer + Frontend | vm1 | 1 vCPU | 512 MB | 4 US$ | Komputer A |
-| 2  | VM2 | Application Server 1 | vm3 | 1 vCPU | 2 GB | 12 US$ | Komputer A |
-| 3  | VM3 | Application Server 2 | vm3 | 1 vCPU | 2 GB | 12 US$ | Komputer B |
-| 4  | VM4 | Application Server 3 | vm3 | 1 vCPU | 2 GB | 12 US$ | Komputer B |
-| 5  | VM5 | Database Server (MongoDB) | vm5 | 2 vCPU | 4 GB | 24 US$ | Komputer A |
-| **Total** | | | | | | **64 US$** | |
+| 1  | VM1 | Load Balancer + Frontend | vm1 | 1 vCPU | 512 MB | 4.75 US$ | Komputer A |
+| 2  | VM2 | Application Server 1 | vm3 | 1 vCPU | 2 GB | 18.98 US$ | Komputer A |
+| 3  | VM3 | Application Server 2 | vm3 | 1 vCPU | 2 GB | 18.98 US$ | Komputer B |
+| 4  | VM4 | Database Server (MongoDB) | vm5 | 2 vCPU | 4 GB | 34.68 US$ | Komputer A |
+| **Total** | | | | | | **77.39 US$** | |
 
 * **Total Penggunaan Anggaran**: 64 US$ / bulan (Masih di bawah batas maksimal 75 US$, menghemat 11 US$).
 
