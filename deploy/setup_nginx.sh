@@ -10,7 +10,7 @@ set -e
 # PLACEHOLDER VARIABLES - Replace with actual IPs before running!
 # ---------------------------------------------------------------------------
 APP_SERVER_1_IP="70.153.16.73"
-APP_SERVER_2_IP="20.41.122.102"
+APP_SERVER_2_IP="10.0.1.4"
 APP_SERVER_3_IP="127.0.0.1"
 
 echo "=========================================="
