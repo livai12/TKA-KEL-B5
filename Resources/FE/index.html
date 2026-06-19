@@ -6,143 +6,68 @@
   <meta name="description" content="Order Processing Service - Final Project Teknologi Komputasi Awan" />
   <title>Order Processing Service</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=2.5" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
   <!-- ============================================ -->
-  <!-- LANDING / AUTH SECTION                        -->
+  <!-- AUTH SECTION                                  -->
   <!-- ============================================ -->
-  <div id="auth-section" class="landing-page">
-    
-    <!-- Ambient Background Video -->
-    <div class="hero-video-container">
-      <video autoplay muted loop playsinline class="hero-video">
-        <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bg-hero-0BnFGdr81Ifnj3WbBZoNt1KE4D5DMT.mp4" type="video/mp4" />
-      </video>
-      <div class="video-overlay-left"></div>
-      <div class="video-overlay-bottom"></div>
+  <div id="auth-section" class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>Order Processing Service</h1>
+        <p>Final Project Teknologi Komputasi Awan</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <h2>Login</h2>
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="contoh: user1@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Masukkan password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-login">Login</button>
+        <p class="auth-toggle">Belum punya akun? <a href="#" onclick="toggleAuth(event)">Daftar di sini</a></p>
+        <div id="login-error" class="alert alert-error hidden"></div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
+        <h2>Registrasi</h2>
+        <div class="form-group">
+          <label for="reg-name">Nama Lengkap</label>
+          <input type="text" id="reg-name" placeholder="Nama lengkap" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="Email aktif" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" placeholder="Minimal 6 karakter" required minlength="6" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-city">Kota</label>
+            <input type="text" id="reg-city" placeholder="Kota" />
+          </div>
+          <div class="form-group">
+            <label for="reg-phone">No. Telepon</label>
+            <input type="text" id="reg-phone" placeholder="08xxxxxxxxxx" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-register">Daftar</button>
+        <p class="auth-toggle">Sudah punya akun? <a href="#" onclick="toggleAuth(event)">Login di sini</a></p>
+        <div id="register-error" class="alert alert-error hidden"></div>
+      </form>
     </div>
-
-    <!-- Subtle Grid Overlay -->
-    <div class="hero-grid-lines">
-      <div class="grid-line-h" style="top: 12.5%"></div>
-      <div class="grid-line-h" style="top: 25%"></div>
-      <div class="grid-line-h" style="top: 37.5%"></div>
-      <div class="grid-line-h" style="top: 50%"></div>
-      <div class="grid-line-h" style="top: 62.5%"></div>
-      <div class="grid-line-h" style="top: 75%"></div>
-      <div class="grid-line-h" style="top: 87.5%"></div>
-      <div class="grid-line-v" style="left: 8.33%"></div>
-      <div class="grid-line-v" style="left: 16.66%"></div>
-      <div class="grid-line-v" style="left: 25%"></div>
-      <div class="grid-line-v" style="left: 33.33%"></div>
-      <div class="grid-line-v" style="left: 41.66%"></div>
-      <div class="grid-line-v" style="left: 50%"></div>
-      <div class="grid-line-v" style="left: 58.33%"></div>
-      <div class="grid-line-v" style="left: 66.66%"></div>
-      <div class="grid-line-v" style="left: 75%"></div>
-      <div class="grid-line-v" style="left: 83.33%"></div>
-      <div class="grid-line-v" style="left: 91.66%"></div>
-    </div>
-
-    <!-- Brand Header / Navbar -->
-    <header class="landing-navbar">
-      <div class="brand">
-        <span class="brand-logo">ORDERIFY</span>
-        <span class="brand-tag">TKA B-05</span>
-      </div>
-      <nav class="nav-links">
-        <a href="#" class="active" onclick="event.preventDefault()">Capabilities</a>
-        <a href="#" onclick="event.preventDefault()">Process</a>
-        <a href="#" onclick="event.preventDefault()">Infra</a>
-        <a href="#" onclick="event.preventDefault()">Integrations</a>
-        <a href="#" onclick="event.preventDefault()">Security</a>
-      </nav>
-      <div class="nav-actions">
-        <a href="#" class="nav-signin-link" onclick="focusLogin(event)">Sign in</a>
-        <button class="btn btn-primary btn-sm btn-pill" onclick="focusLogin(event)">Deploy agent</button>
-      </div>
-    </header>
-
-    <!-- Main Landing Content (Left Column) -->
-    <div class="landing-content">
-      <div class="hero-text">
-        <div class="hero-badge">High-Performance E-Commerce Processing</div>
-        <h1>E-Commerce Scale,<br>Orders that <span id="dynamic-word" class="gradient-text">delegate</span></h1>
-        <p class="hero-desc">
-          Distributed order processing system utilizing high-performance asynchronous microservices, cluster load balancing, and low-latency database replication.
-        </p>
-      </div>
-
-      <!-- Transparent Inline Auth Container -->
-      <div class="auth-container-inline">
-        <!-- Login Form -->
-        <form id="login-form" onsubmit="handleLogin(event)">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #fff;">Sign In</h2>
-          <div class="form-group" style="margin-bottom: 12px;">
-            <label for="login-email" style="font-size: 0.7rem;">Email Address</label>
-            <input type="email" id="login-email" placeholder="e.g. user1@example.com" required style="padding: 10px 14px; font-size: 0.9rem;" />
-          </div>
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label for="login-password" style="font-size: 0.7rem;">Password</label>
-            <input type="password" id="login-password" placeholder="Enter your password" required style="padding: 10px 14px; font-size: 0.9rem;" />
-          </div>
-          <button type="submit" class="btn btn-primary btn-glow btn-full" id="btn-login" style="padding: 10px 20px; font-size: 0.88rem;">Login to Dashboard</button>
-          <p class="auth-toggle" style="margin-top: 12px; font-size: 0.8rem;">New to platform? <a href="#" onclick="toggleAuth(event)">Create an account</a></p>
-          <div id="login-error" class="alert alert-error hidden"></div>
-        </form>
-
-        <!-- Register Form -->
-        <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #fff;">Create Account</h2>
-          <div class="form-group" style="margin-bottom: 12px;">
-            <label for="reg-name" style="font-size: 0.7rem;">Full Name</label>
-            <input type="text" id="reg-name" placeholder="Enter full name" required style="padding: 10px 14px; font-size: 0.9rem;" />
-          </div>
-          <div class="form-group" style="margin-bottom: 12px;">
-            <label for="reg-email" style="font-size: 0.7rem;">Email Address</label>
-            <input type="email" id="reg-email" placeholder="active.email@example.com" required style="padding: 10px 14px; font-size: 0.9rem;" />
-          </div>
-          <div class="form-group" style="margin-bottom: 12px;">
-            <label for="reg-password" style="font-size: 0.7rem;">Password</label>
-            <input type="password" id="reg-password" placeholder="Min 6 characters" required minlength="6" style="padding: 10px 14px; font-size: 0.9rem;" />
-          </div>
-          <div class="form-row" style="margin-bottom: 16px;">
-            <div class="form-group" style="flex:1; margin-bottom:0;">
-              <label for="reg-city" style="font-size: 0.7rem;">City</label>
-              <input type="text" id="reg-city" placeholder="e.g. Surabaya" style="padding: 10px 14px; font-size: 0.9rem;" />
-            </div>
-            <div class="form-group" style="flex:1; margin-bottom:0;">
-              <label for="reg-phone" style="font-size: 0.7rem;">Phone</label>
-              <input type="text" id="reg-phone" placeholder="08xxxxxxxxxx" style="padding: 10px 14px; font-size: 0.9rem;" />
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary btn-glow btn-full" id="btn-register" style="padding: 10px 20px; font-size: 0.88rem;">Register Account</button>
-          <p class="auth-toggle" style="margin-top: 12px; font-size: 0.8rem;">Already have account? <a href="#" onclick="toggleAuth(event)">Sign In here</a></p>
-          <div id="register-error" class="alert alert-error hidden"></div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Bottom Section: Statistics -->
-    <footer class="landing-footer">
-      <div class="stat-item">
-        <h3>10,000+</h3>
-        <p>orders processed</p>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <h3>99.99%</h3>
-        <p>system uptime</p>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <h3>&lt;10ms</h3>
-        <p>database latency</p>
-      </div>
-    </footer>
+  </div>
 
   <!-- ============================================ -->
   <!-- MAIN APPLICATION                              -->
@@ -152,7 +77,7 @@
     <!-- Top Bar -->
     <header class="topbar">
       <div class="topbar-left">
-        <h1>ORDERIFY</h1>
+        <h1>Order Processing Service</h1>
       </div>
       <div class="topbar-right">
         <span id="user-info" class="user-badge"></span>
@@ -201,9 +126,7 @@
 
       <!-- TAB: Buat Pesanan -->
       <section id="tab-create-order" class="tab-panel hidden">
-        <div class="section-header">
-          <h2>Buat Pesanan Baru</h2>
-        </div>
+        <h2>Buat Pesanan Baru</h2>
         <div class="order-layout">
           <div class="order-form-section">
             <div class="card">
@@ -218,7 +141,7 @@
                 <label for="item-qty">Jumlah</label>
                 <input type="number" id="item-qty" min="1" value="1" />
               </div>
-              <button class="btn btn-secondary btn-glow btn-full" onclick="addToCart()">Tambah ke Keranjang</button>
+              <button class="btn btn-secondary" onclick="addToCart()">Tambah ke Keranjang</button>
             </div>
 
             <div class="card">
@@ -264,7 +187,7 @@
                 <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">Rp 0</span></div>
                 <div class="summary-row"><span>Ongkos Kirim</span><span id="cart-shipping">Rp 0</span></div>
                 <div class="summary-row total"><span>Total</span><span id="cart-total">Rp 0</span></div>
-                <button class="btn btn-primary btn-glow btn-full" onclick="submitOrder()">Buat Pesanan</button>
+                <button class="btn btn-primary btn-full" onclick="submitOrder()">Buat Pesanan</button>
               </div>
             </div>
             <div id="order-result" class="alert hidden"></div>
@@ -306,9 +229,7 @@
 
       <!-- TAB: Admin Panel -->
       <section id="tab-admin" class="tab-panel hidden">
-        <div class="section-header">
-          <h2>Admin Panel</h2>
-        </div>
+        <h2>Admin Panel</h2>
 
         <!-- Admin Stats -->
         <div id="admin-stats" class="stats-grid"></div>
@@ -330,7 +251,7 @@
               </select>
             </div>
             <div class="form-group" style="flex:0; align-self:flex-end">
-              <button class="btn btn-primary btn-glow" onclick="adminUpdateStatus()">Update</button>
+              <button class="btn btn-primary" onclick="adminUpdateStatus()">Update</button>
             </div>
           </div>
           <div id="admin-update-result" class="alert hidden"></div>
@@ -374,47 +295,15 @@
       if (authToken && currentUser) {
         showApp();
       }
-
-      // Word Rotator for Landing Heading
-      const words = ["delegate", "execute", "scale", "automate"];
-      let wordIndex = 0;
-      const wordEl = document.getElementById("dynamic-word");
-      if (wordEl) {
-        setInterval(() => {
-          wordEl.style.opacity = "0";
-          setTimeout(() => {
-            wordIndex = (wordIndex + 1) % words.length;
-            wordEl.textContent = words[wordIndex];
-            wordEl.style.opacity = "1";
-          }, 300);
-        }, 3000);
-      }
     });
 
     // -------------------------------------------
     // AUTH
     // -------------------------------------------
-    function focusLogin(e) {
-      if (e) e.preventDefault();
-      const emailInput = document.getElementById("login-email");
-      if (emailInput) {
-        emailInput.scrollIntoView({ behavior: 'smooth' });
-        emailInput.focus();
-      }
-    }
-
     function toggleAuth(e) {
-      if (e) e.preventDefault();
-      const loginForm = document.getElementById("login-form");
-      const registerForm = document.getElementById("register-form");
-
-      if (loginForm.classList.contains("hidden")) {
-        loginForm.classList.remove("hidden");
-        registerForm.classList.add("hidden");
-      } else {
-        loginForm.classList.add("hidden");
-        registerForm.classList.remove("hidden");
-      }
+      e.preventDefault();
+      document.getElementById("login-form").classList.toggle("hidden");
+      document.getElementById("register-form").classList.toggle("hidden");
       clearAlerts();
     }
 
@@ -443,7 +332,7 @@
         showAlert("login-error", "Gagal terhubung ke server: " + err.message);
       } finally {
         btn.disabled = false;
-        btn.textContent = "Login to Dashboard";
+        btn.textContent = "Login";
       }
     }
 
@@ -477,7 +366,7 @@
         showAlert("register-error", "Gagal terhubung ke server: " + err.message);
       } finally {
         btn.disabled = false;
-        btn.textContent = "Register Account";
+        btn.textContent = "Daftar";
       }
     }
 
@@ -762,7 +651,7 @@
             <div class="detail-row"><span>Pembayaran</span><span>${esc(o.payment_method || "-")}</span></div>
             <div class="detail-row"><span>Alamat</span><span>${esc(o.customer_address || "-")}</span></div>
           </div>
-          <h4 style="margin-top:20px;margin-bottom:10px;font-weight:700;">Item Pesanan</h4>
+          <h4>Item Pesanan</h4>
           <div class="detail-items">
             ${(o.items || []).map(item => `
               <div class="detail-item">
@@ -771,13 +660,13 @@
               </div>
             `).join("")}
           </div>
-          <div class="detail-section" style="margin-top:20px">
+          <div class="detail-section" style="margin-top:16px">
             <div class="detail-row"><span>Subtotal</span><span>${formatRp(o.subtotal)}</span></div>
             ${o.discount_amt ? `<div class="detail-row"><span>Diskon</span><span>-${formatRp(o.discount_amt)}</span></div>` : ""}
             <div class="detail-row"><span>Ongkir</span><span>${formatRp(o.shipping_cost)}</span></div>
             <div class="detail-row total"><span>Total</span><span>${formatRp(o.total)}</span></div>
           </div>
-          ${o.notes ? `<p style="margin-top:16px;color:var(--text-secondary)">Catatan: ${esc(o.notes)}</p>` : ""}
+          ${o.notes ? `<p style="margin-top:12px;color:var(--text-muted)">Catatan: ${esc(o.notes)}</p>` : ""}
         `;
       } catch (err) {
         body.innerHTML = `<p class="error-state">Gagal memuat detail: ${esc(err.message)}</p>`;
@@ -910,14 +799,6 @@
       return "Rp " + Number(amount || 0).toLocaleString("id-ID");
     }
 
-    // Escape HTML Helper
-    function esc(str) {
-      if (!str) return "";
-      const div = document.createElement("div");
-      div.appendChild(document.createTextNode(String(str)));
-      return div.innerHTML;
-    }
-
     function formatDate(isoStr) {
       if (!isoStr) return "-";
       const d = new Date(isoStr);
@@ -925,6 +806,13 @@
         day: "numeric", month: "short", year: "numeric",
         hour: "2-digit", minute: "2-digit"
       });
+    }
+
+    function esc(str) {
+      if (!str) return "";
+      const div = document.createElement("div");
+      div.appendChild(document.createTextNode(String(str)));
+      return div.innerHTML;
     }
 
     function clearAlerts() {
