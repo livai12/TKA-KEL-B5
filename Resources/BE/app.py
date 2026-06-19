@@ -299,6 +299,94 @@ def delete_product(product_id):
 # ORDER endpoints
 # ═══════════════════════════════════════════
 
+# ───────────────────────────────────────────
+# Non-Auth /order endpoints (Simple FE support)
+# ───────────────────────────────────────────
+
+@app.route("/order", methods=["POST"])
+def create_simple_order():
+    d = request.get_json() or {}
+    product = d.get("product")
+    quantity = d.get("quantity")
+    price = d.get("price")
+
+    if not product or not quantity or not price:
+        return err("Semua field wajib diisi")
+
+    try:
+        qty = int(quantity)
+        prc = float(price)
+    except ValueError:
+        return err("quantity dan price harus berupa angka")
+
+    import uuid
+    now = now_iso()
+    total = prc * qty
+
+    doc = {
+        "order_id": str(uuid.uuid4()),
+        "product": product,
+        "quantity": qty,
+        "price": prc,
+        "total": total,
+        "status": "pending",
+        "created_at": now,
+        "updated_at": now,
+        "items": [{
+            "product_id": None,
+            "product_name": product,
+            "category": "General",
+            "qty": qty,
+            "price": prc,
+            "subtotal": total
+        }]
+    }
+
+    result = orders_col.insert_one(doc)
+    doc["_id"] = str(result.inserted_id)
+    doc["created_at"] = doc["created_at"].isoformat()
+    doc["updated_at"] = doc["updated_at"].isoformat()
+    return jsonify(doc), 201
+
+
+@app.route("/order/<order_id>", methods=["GET"])
+def get_simple_order(order_id):
+    doc = orders_col.find_one({"order_id": order_id})
+    if not doc:
+        return err("Order tidak ditemukan", 404)
+    d = serialize(doc)
+    if "items" in d and len(d["items"]) > 0:
+        if "product" not in d:
+            d["product"] = d["items"][0].get("product_name", "")
+        if "quantity" not in d:
+            d["quantity"] = d["items"][0].get("qty", 1)
+        if "price" not in d:
+            d["price"] = d["items"][0].get("price", d["total"])
+    return jsonify(d)
+
+
+@app.route("/order/<order_id>", methods=["PUT"])
+def update_simple_order(order_id):
+    d = request.get_json() or {}
+    status = d.get("status")
+    valid = ["pending", "processing", "completed", "cancelled"]
+    if status not in valid:
+        return err(f"Status tidak valid. Pilihan: {valid}")
+
+    result = orders_col.update_one(
+        {"order_id": order_id},
+        {"$set": {"status": status, "updated_at": now_iso()}}
+    )
+    if result.matched_count == 0:
+        return err("Order tidak ditemukan", 404)
+
+    return jsonify({"order_id": order_id, "status": status})
+
+
+# ───────────────────────────────────────────
+# Auth-based /orders endpoints (Locust/API support)
+# ───────────────────────────────────────────
+
 @app.route("/orders", methods=["POST"])
 @login_required
 def create_order():
@@ -371,31 +459,56 @@ def create_order():
 
 
 @app.route("/orders", methods=["GET"])
-@login_required
 def list_orders():
-    # User hanya lihat ordernya sendiri; admin lihat semua
-    query = {} if g.role == "admin" else {"user_id": ObjectId(g.user_id)}
+    auth = request.headers.get("Authorization", "")
+    if auth.startswith("Bearer "):
+        token = auth.split(" ", 1)[1]
+        try:
+            payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+            g.user_id = payload["sub"]
+            g.role    = payload["role"]
+        except Exception:
+            return err("Token tidak valid", 401)
 
-    status = request.args.get("status")
-    city   = request.args.get("city")
-    if status:
-        query["status"] = status
-    if city and g.role == "admin":
-        query["customer_city"] = city
+        # User hanya lihat ordernya sendiri; admin lihat semua
+        query = {} if g.role == "admin" else {"user_id": ObjectId(g.user_id)}
 
-    try:
-        page  = max(1, int(request.args.get("page",  1)))
-        limit = min(100, max(1, int(request.args.get("limit", 20))))
-    except ValueError:
-        page, limit = 1, 20
+        status = request.args.get("status")
+        city   = request.args.get("city")
+        if status:
+            query["status"] = status
+        if city and g.role == "admin":
+            query["customer_city"] = city
 
-    total  = orders_col.count_documents(query)
-    docs   = list(orders_col.find(query, {"_id": 1, "order_id": 1, "customer_name": 1,
-                                          "total": 1, "status": 1, "payment_method": 1,
-                                          "created_at": 1, "items": 1})
-                  .sort("created_at", DESCENDING).skip((page-1)*limit).limit(limit))
-    return jsonify({"page": page, "limit": limit, "total": total,
-                    "total_pages": -(-total // limit), "data": [serialize(d) for d in docs]})
+        try:
+            page  = max(1, int(request.args.get("page",  1)))
+            limit = min(100, max(1, int(request.args.get("limit", 20))))
+        except ValueError:
+            page, limit = 1, 20
+
+        total  = orders_col.count_documents(query)
+        docs   = list(orders_col.find(query, {"_id": 1, "order_id": 1, "customer_name": 1,
+                                              "total": 1, "status": 1, "payment_method": 1,
+                                              "created_at": 1, "items": 1})
+                      .sort("created_at", DESCENDING).skip((page-1)*limit).limit(limit))
+        return jsonify({"page": page, "limit": limit, "total": total,
+                        "total_pages": -(-total // limit), "data": [serialize(d) for d in docs]})
+    else:
+        # Non-auth call (e.g. from the simple frontend)
+        # Returns all orders in a flat list matching README specification
+        docs = list(orders_col.find({}).sort("created_at", DESCENDING))
+        formatted_docs = []
+        for doc in docs:
+            d = serialize(doc)
+            if "items" in d and len(d["items"]) > 0:
+                if "product" not in d:
+                    d["product"] = d["items"][0].get("product_name", "")
+                if "quantity" not in d:
+                    d["quantity"] = d["items"][0].get("qty", 1)
+                if "price" not in d:
+                    d["price"] = d["items"][0].get("price", d["total"])
+            formatted_docs.append(d)
+        return jsonify(formatted_docs)
 
 
 @app.route("/orders/<order_id>", methods=["GET"])
