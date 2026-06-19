@@ -9,11 +9,11 @@ set -e
 # ---------------------------------------------------------------------------
 # PLACEHOLDER VARIABLES - Fill these in before running!
 # ---------------------------------------------------------------------------
-MONGO_URI="mongodb://192.168.56.14:27017/"
+MONGO_URI="mongodb://70.153.192.147:27017/"
 JWT_SECRET="ganti-ini-di-production-dengan-string-acak-panjang"
 
 # Application settings
-APP_USER="ubuntu"
+APP_USER="${SUDO_USER:-$(whoami)}"
 APP_DIR="/home/${APP_USER}/app"
 VENV_DIR="${APP_DIR}/venv"
 GUNICORN_WORKERS=3          # 3 workers for 1vCPU (2*CPU+1)
