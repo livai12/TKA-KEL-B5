@@ -35,8 +35,13 @@ Untuk mencapai hasil performa maksimal dalam batas anggaran 75 US$/bulan, diimpl
 ## 2. Arsitektur Cloud
 
 ### 2.1 Diagram Arsitektur
-Diagram arsitektur sistem dirancang menggunakan Draw.io dan disimpan pada direktori proyek:
-`result/arsitektur.png`
+
+Diagram arsitektur sistem dirancang menggunakan Draw.io dan disimpan pada direktori proyek `result/arsitektur/arsitektur.png`:
+
+<p align="center">
+  <img src="result/arsitektur/arsitektur.png" width="400" alt="Diagram Arsitektur"><br>
+  <em>Gambar 2.1: Diagram Arsitektur Sistem terdistribusi</em>
+</p>
 
 ```
                            +-------------------+
@@ -65,13 +70,16 @@ Diagram arsitektur sistem dirancang menggunakan Draw.io dan disimpan pada direkt
 
 Sistem dibagi ke dalam 5 VM dengan pembagian host fisik untuk simulasi lokal:
 
-| No | VM | Peran | Tipe VM | CPU | Memory | Biaya Bulanan | Host Fisik |
-|----|----|-------|---------|-----|--------|---------------|------------|
-| 1  | VM1 | Load Balancer + Frontend | vm1 | 1 vCPU | 512 MB | 4.75 US$ | Komputer A |
-| 2  | VM2 | Application Server 1 | vm3 | 1 vCPU | 2 GB | 18.98 US$ | Komputer A |
-| 3  | VM3 | Application Server 2 | vm3 | 1 vCPU | 2 GB | 18.98 US$ | Komputer B |
-| 4  | VM4 | Database Server (MongoDB) | vm5 | 2 vCPU | 4 GB | 34.68 US$ | Komputer A |
-| **Total** | | | | | | **77.39 US$** | |
+| No | VM | Peran | Tipe VM | CPU | RAM | Harga/bulan | Host Fisik |
+|----|------|-------|------|-----|-----|-------------|------|
+| 1 | VM1 | Load Balancer (Nginx) + Frontend | vm1 | 1 vCPU | 512 MB | $4 | Komputer A |
+| 2 | VM2 | App Server 1 (Flask + Gunicorn) | vm3 | 1 vCPU | 2 GB | $12 | Komputer A |
+| 3 | VM3 | App Server 2 (Flask + Gunicorn) | vm3 | 1 vCPU | 2 GB | $12 | Komputer B |
+| 4 | VM4 | App Server 3 (Flask + Gunicorn) | vm3 | 1 vCPU | 2 GB | $12 | Komputer B |
+| 5 | VM5 | Database Server (MongoDB) | vm5 | 2 vCPU | 4 GB | $24 | Komputer A |
+| | | | **TOTAL** | | | **$64** | |
+
+Budget terpakai: $64 dari $75 (sisa $11).
 
 
 
@@ -175,24 +183,59 @@ Langkah konfigurasi:
 
 ## 4. Hasil Pengujian Endpoint
 
-Pengujian dilakukan menggunakan Postman untuk memverifikasi fungsionalitas seluruh endpoint API.
+Pengujian dilakukan menggunakan Postman untuk memverifikasi fungsionalitas seluruh endpoint API. Berikut adalah daftar seluruh endpoint REST API yang telah dikonfigurasi:
 
-| No | Endpoint | HTTP Method | Deskripsi | Status | Screenshot Pendukung |
-|----|----------|-------------|-----------|--------|----------------------|
-| 1  | `/auth/register` | POST | Pendaftaran user baru | 201 Created | `result/postman_register.png` |
-| 2  | `/auth/login` | POST | Login user untuk mendapatkan JWT | 200 OK | `result/postman_login.png` |
-| 3  | `/auth/me` | GET | Mendapatkan profil user aktif | 200 OK | `result/postman_me.png` |
-| 4  | `/products` | GET | Mendapatkan daftar produk | 200 OK | `result/postman_products.png` |
-| 5  | `/products/<id>` | GET | Mendapatkan detail produk spesifik | 200 OK | `result/postman_product_detail.png` |
-| 6  | `/orders` | POST | Membuat pesanan baru | 201 Created | `result/postman_create_order.png` |
-| 7  | `/orders` | GET | Mendapatkan riwayat pesanan user | 200 OK | `result/postman_list_orders.png` |
-| 8  | `/orders/<order_id>` | GET | Mendapatkan detail status pesanan | 200 OK | `result/postman_order_detail.png` |
-| 9  | `/orders/<order_id>/status` | PUT | Mengubah status pesanan (Admin) | 200 OK | `result/postman_update_status.png` |
-| 10 | `/admin/stats` | GET | Mengambil statistik penjualan (Admin) | 200 OK | `result/postman_admin_stats.png` |
-| 11 | `/admin/users` | GET | Mendapatkan daftar seluruh user (Admin) | 200 OK | `result/postman_admin_users.png` |
-| 12 | `/health` | GET | Cek kesehatan koneksi backend & DB | 200 OK | `result/postman_health.png` |
+<p align="center">
+  <img src="result/postman/postman_list_endpoints.png" width="250" alt="Daftar Seluruh Endpoint Postman"><br>
+  <em>Gambar 4.0: Daftar Seluruh Endpoint REST API pada Postman</em>
+</p>
 
-*Tampilan antarmuka web frontend yang berjalan dapat dilihat pada tangkapan layar `result/frontend.png`.*
+<br>
+
+| No | Endpoint | HTTP Method | Deskripsi | Status | Screenshot |
+|----|----------|-------------|-----------|--------|------------|
+| 1  | `/auth/register` | POST | Pendaftaran user baru | 201 Created | <img src="result/postman/postman_register.png" width="150" alt="Register"> |
+| 2  | `/auth/login` | POST | Login user untuk mendapatkan JWT | 200 OK | <img src="result/postman/postman_login.png" width="150" alt="Login"> |
+| 3  | `/auth/me` | GET | Mendapatkan profil user aktif | 200 OK | <img src="result/postman/postman_me.png" width="150" alt="Me"> |
+| 4  | `/products` | GET | Mendapatkan daftar produk | 200 OK | <img src="result/postman/postman_products.png" width="150" alt="Products"> |
+| 5  | `/products/<id>` | GET | Mendapatkan detail produk spesifik | 200 OK | <img src="result/postman/postman_product_detail.png" width="150" alt="Product Detail"> |
+| 6  | `/orders` | POST | Membuat pesanan baru | 201 Created | <img src="result/postman/postman_create_order.png" width="150" alt="Create Order"> |
+| 7  | `/orders` | GET | Mendapatkan riwayat pesanan user | 200 OK | <img src="result/postman/postman_list_orders.png" width="150" alt="List Orders"> |
+| 8  | `/orders/<order_id>` | GET | Mendapatkan detail status pesanan | 200 OK | <img src="result/postman/postman_order_detail.png" width="150" alt="Order Detail"> |
+| 9  | `/orders/<order_id>/status` | PUT | Mengubah status pesanan (Admin) | 200 OK | <img src="result/postman/postman_update_status.png" width="150" alt="Update Status"> |
+| 10 | `/admin/stats` | GET | Mengambil statistik penjualan (Admin) | 200 OK | <img src="result/postman/postman_admin_stats.png" width="150" alt="Stats"> |
+| 11 | `/admin/users` | GET | Mendapatkan daftar seluruh user (Admin) | 200 OK | <img src="result/postman/postman_admin_users.png" width="150" alt="Users"> |
+| 12 | `/health` | GET | Cek kesehatan koneksi backend & DB | 200 OK | <img src="result/postman/postman_health.png" width="150" alt="Health"> |
+
+### 4.5 Tampilan Frontend
+
+Berikut adalah beberapa tampilan antarmuka web frontend yang telah berhasil diuji dan berjalan melalui IP Load Balancer (`20.41.112.161`):
+
+<p align="center">
+  <img src="result/frontend/frontend_create_order.png" width="250" alt="Frontend - Buat Pesanan Baru"><br>
+  <em>Gambar 4.1: Tampilan Halaman Pembuatan Pesanan Baru</em>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="result/frontend/frontend_check_status.png" width="250" alt="Frontend - Cek Status Pesanan"><br>
+  <em>Gambar 4.2: Tampilan Halaman Pengecekan Status Pesanan</em>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="result/frontend/frontend_update_status.png" width="250" alt="Frontend - Update Status Pesanan"><br>
+  <em>Gambar 4.3: Tampilan Halaman Pembaruan Status Pesanan (Admin)</em>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="result/frontend/frontend_order_history.png" width="250" alt="Frontend - Riwayat Pesanan"><br>
+  <em>Gambar 4.4: Tampilan Halaman Riwayat Transaksi Pesanan</em>
+</p>
 
 ---
 
@@ -202,61 +245,410 @@ Pengujian beban (load testing) dilakukan dari komputer terpisah (client locust) 
 
 *Setiap sebelum menjalankan skenario baru, data testing pada database dibersihkan menggunakan script `/home/ubuntu/deploy/cleanup_orders.sh` agar tidak memengaruhi hasil pengujian berikutnya.*
 
-### 5.1 Skenario 1: Maksimum RPS (0% Failure Rate)
-* **Tujuan**: Menemukan batasan maksimal kapasitas server (Request Per Second) dengan kegagalan 0%.
-* **Durasi**: 60 Detik
-* **Hasil**:
-  - **Rata-rata RPS**: [Isi hasil pengujian RPS]
-  - **Concurrent Users**: [Isi jumlah user]
-  - **Rata-rata Response Time**: [Isi waktu respons dalam ms] ms
-  - **Kegagalan**: 0%
-  *(Grafik hasil pengujian dapat dilihat di `result/locust_rps.png` dan penggunaan resource CPU di `result/cpu_usage_scenario1.png`)*
+
+### 5.1 Skenario 1: Maksimum RPS (0% Failure)
+
+Skenario 1 diuji dengan tiga kondisi pembebanan bertahap:
+
+#### 5.1.1 Skenario 1A: Beban Konkurensi 700 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 15 / detik (Gradual)
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Jumlah User | 700 |
+| Rata-rata RPS | **127.14** (Peak: 200.9) |
+| Failure Rate | 0% |
+| Avg Response Time | 310 ms |
+
+<p align="center">
+  <img src="result/skenario1/locust_rps.png" width="400" alt="Locust Skenario 1A"><br>
+  <em>Gambar 5.1: Grafik Pengetesan Skenario 1A (700 Users)</em>
+</p>
+
+#### 5.1.2 Skenario 1B: Beban Konkurensi 1050 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 15 / detik (Gradual)
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Jumlah User | 1050 |
+| Rata-rata RPS | **144.69** |
+| Failure Rate | 0% |
+| Avg Response Time | 320 ms |
+
+<p align="center">
+  <img src="result/skenario1/locust_concurrency_sr15_1050.png" width="400" alt="Locust Skenario 1B"><br>
+  <em>Gambar 5.1a: Grafik Pengetesan Skenario 1B (1050 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario1/cpu_app1_scenario1_1050.png" width="200" alt="CPU App Server 1 1050">
+  <img src="result/skenario1/cpu_app2_scenario1_1050.png" width="200" alt="CPU App Server 2 1050"><br>
+  <em>Gambar 5.1b: CPU & Memory App Server 1 & 2 (Skenario 1B - 1050 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario1/cpu_db_scenario1_1050.png" width="300" alt="CPU Database MongoDB 1050"><br>
+  <em>Gambar 5.1c: Penggunaan Resource pada Database MongoDB (Skenario 1B - 1050 Users)</em>
+</p>
+
+#### 5.1.3 Skenario 1C: Beban Konkurensi 1150 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 15 / detik (Gradual)
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Jumlah User | 1150 |
+| Rata-rata RPS | **147.06** |
+| Failure Rate | 1% |
+| Avg Response Time | 220 ms |
+
+<p align="center">
+  <img src="result/skenario1/locust_concurrency_sr15_1150.png" width="400" alt="Locust Skenario 1C"><br>
+  <em>Gambar 5.1d: Grafik Pengetesan Skenario 1C (1150 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario1/cpu_app1_scenario1_1150.png" width="200" alt="CPU App Server 1 1150">
+  <img src="result/skenario1/cpu_app2_scenario1_1150.png" width="200" alt="CPU App Server 2 1150"><br>
+  <em>Gambar 5.1e: CPU & Memory App Server 1 & 2 (Skenario 1C - 1150 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario1/cpu_db_scenario1_1150.png" width="300" alt="CPU Database MongoDB 1150"><br>
+  <em>Gambar 5.1f: Penggunaan Resource pada Database MongoDB (Skenario 1C - 1150 Users)</em>
+</p>
 
 ### 5.2 Skenario 2: Peak Concurrency - Spawn Rate 50
-* **Tujuan**: Mengukur batas maksimal concurrent user yang dapat ditangani dengan spawn rate 50 user/detik sebelum terjadi kegagalan sistem.
-* **Durasi**: 60 Detik
-* **Hasil**:
-  - **Max Concurrent Users**: [Isi jumlah user]
-  - **Avg RPS**: [Isi rata-rata RPS]
-  - **Avg Response Time**: [Isi waktu respons] ms
-  *(Grafik hasil pengujian dapat dilihat di `result/locust_concurrency_sr50.png`)*
+
+Skenario 2 diuji dengan empat kondisi pembebanan yang berbeda:
+
+#### 5.2.1 Skenario 2A: Beban Konkurensi 300 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 50
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (0% fail) | **300** |
+| Rata-rata RPS | 93.97 |
+| Avg Response Time | 180 ms |
+
+<p align="center">
+  <img src="result/skenario2/locust_concurrency_sr50_300.jpg" width="400" alt="Locust Skenario 2A"><br>
+  <em>Gambar 5.2: Grafik Pengetesan Skenario 2A (300 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario2/cpu_app1_scenario2_300.jpg" width="200" alt="CPU App Server 1 300">
+  <img src="result/skenario2/cpu_app2_scenario2_300.jpg" width="200" alt="CPU App Server 2 300"><br>
+  <em>Gambar 5.3: CPU & Memory App Server 1 & 2 (Skenario 2A - 300 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario2/cpu_db_scenario2_300.jpg" width="300" alt="CPU Database MongoDB 300"><br>
+  <em>Gambar 5.4: Penggunaan Resource pada Database MongoDB (Skenario 2A - 300 Users)</em>
+</p>
+
+#### 5.2.2 Skenario 2B: Beban Konkurensi 350 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 50
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (0% fail) | **350** |
+| Rata-rata RPS | 111.73 |
+| Avg Response Time | 280 ms |
+
+<p align="center">
+  <img src="result/skenario2/locust_concurrency_sr50_350.jpg" width="400" alt="Locust Skenario 2B"><br>
+  <em>Gambar 5.5: Grafik Pengetesan Skenario 2B (350 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario2/cpu_app1_scenario2_350.jpg" width="200" alt="CPU App Server 1 350">
+  <img src="result/skenario2/cpu_app2_scenario2_350.jpg" width="200" alt="CPU App Server 2 350"><br>
+  <em>Gambar 5.6: CPU & Memory App Server 1 & 2 (Skenario 2B - 350 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario2/cpu_db_scenario2_350.jpg" width="300" alt="CPU Database MongoDB 350"><br>
+  <em>Gambar 5.7: Penggunaan Resource pada Database MongoDB (Skenario 2B - 350 Users)</em>
+</p>
+
+#### 5.2.3 Skenario 2C: Beban Konkurensi 700 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 50
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (0% fail) | **700** |
+| Rata-rata RPS | 206.29 |
+| Avg Response Time | 170 ms |
+
+<p align="center">
+  <img src="result/skenario2/locust_concurrency_sr50_700.png" width="400" alt="Locust Skenario 2C"><br>
+  <em>Gambar 5.8: Grafik Pengetesan Skenario 2C (700 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario2/cpu_app1_scenario2_700.png" width="200" alt="CPU App Server 1 700">
+  <img src="result/skenario2/cpu_app2_scenario2_700.png" width="200" alt="CPU App Server 2 700"><br>
+  <em>Gambar 5.9: CPU & Memory App Server 1 & 2 (Skenario 2C - 700 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario2/cpu_db_scenario2_700.png" width="300" alt="CPU Database MongoDB 700"><br>
+  <em>Gambar 5.10: Penggunaan Resource pada Database MongoDB (Skenario 2C - 700 Users)</em>
+</p>
+
+#### 5.2.4 Skenario 2D: Beban Konkurensi 900 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 50
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (dengan fail) | **900** |
+| Rata-rata RPS | 243.17 |
+| Avg Response Time | 170 ms |
+| Failure Rate | 1% |
+
+<p align="center">
+  <img src="result/skenario2/locust_concurrency_sr50_900.png" width="400" alt="Locust Skenario 2D"><br>
+  <em>Gambar 5.11: Grafik Pengetesan Skenario 2D (900 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario2/cpu_app1_scenario2_900.png" width="200" alt="CPU App Server 1 900">
+  <img src="result/skenario2/cpu_app2_scenario2_900.png" width="200" alt="CPU App Server 2 900"><br>
+  <em>Gambar 5.12: CPU & Memory App Server 1 & 2 (Skenario 2D - 900 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario2/cpu_db_scenario2_900.png" width="300" alt="CPU Database MongoDB 900"><br>
+  <em>Gambar 5.13: Penggunaan Resource pada Database MongoDB (Skenario 2D - 900 Users)</em>
+</p>
 
 ### 5.3 Skenario 3: Peak Concurrency - Spawn Rate 100
-* **Tujuan**: Mengukur batas maksimal concurrent user dengan spawn rate 100 user/detik.
-* **Durasi**: 60 Detik
-* **Hasil**:
-  - **Max Concurrent Users**: [Isi jumlah user]
-  - **Avg RPS**: [Isi rata-rata RPS]
-  - **Avg Response Time**: [Isi waktu respons] ms
-  *(Grafik hasil pengujian dapat dilihat di `result/locust_concurrency_sr100.png`)*
+
+Skenario 3 diuji dengan tiga kondisi pembebanan yang berbeda:
+
+#### 5.3.1 Skenario 3A: Beban Konkurensi 500 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 100
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (0% fail) | **500** |
+| Rata-rata RPS | 156.88 |
+| Avg Response Time | 170 ms |
+
+<p align="center">
+  <img src="result/skenario3/locust_concurrency_sr100_500.png" width="400" alt="Locust Skenario 3A"><br>
+  <em>Gambar 5.14: Grafik Pengetesan Skenario 3A (500 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario3/cpu_app1_scenario3_500.png" width="200" alt="CPU App Server 1 500">
+  <img src="result/skenario3/cpu_app2_scenario3_500.png" width="200" alt="CPU App Server 2 500"><br>
+  <em>Gambar 5.15: CPU & Memory App Server 1 & 2 (Skenario 3A - 500 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario3/cpu_db_scenario3_500.png" width="300" alt="CPU Database MongoDB 500"><br>
+  <em>Gambar 5.16: Penggunaan Resource pada Database MongoDB (Skenario 3A - 500 Users)</em>
+</p>
+
+#### 5.3.2 Skenario 3B: Beban Konkurensi 700 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 100
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (0% fail) | **700** |
+| Rata-rata RPS | 216.76 |
+| Avg Response Time | 330 ms |
+
+<p align="center">
+  <img src="result/skenario3/locust_concurrency_sr100_700.png" width="400" alt="Locust Skenario 3B"><br>
+  <em>Gambar 5.17: Grafik Pengetesan Skenario 3B (700 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario3/cpu_app1_scenario3_700.png" width="200" alt="CPU App Server 1 700">
+  <img src="result/skenario3/cpu_app2_scenario3_700.png" width="200" alt="CPU App Server 2 700"><br>
+  <em>Gambar 5.18: CPU & Memory App Server 1 & 2 (Skenario 3B - 700 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario3/cpu_db_scenario3_700.png" width="300" alt="CPU Database MongoDB 700"><br>
+  <em>Gambar 5.19: Penggunaan Resource pada Database MongoDB (Skenario 3B - 700 Users)</em>
+</p>
+
+#### 5.3.3 Skenario 3C: Beban Konkurensi 900 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 100
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (dengan fail) | **900** |
+| Rata-rata RPS | 206.76 |
+| Avg Response Time | 300 ms |
+| Failure Rate | 2% |
+
+<p align="center">
+  <img src="result/skenario3/locust_concurrency_sr100_900.png" width="400" alt="Locust Skenario 3C"><br>
+  <em>Gambar 5.20: Grafik Pengetesan Skenario 3C (900 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario3/cpu_app1_scenario3_900.png" width="200" alt="CPU App Server 1 900">
+  <img src="result/skenario3/cpu_app2_scenario3_900.png" width="200" alt="CPU App Server 2 900"><br>
+  <em>Gambar 5.21: CPU & Memory App Server 1 & 2 (Skenario 3C - 900 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario3/cpu_db_scenario3_900.png" width="300" alt="CPU Database MongoDB 900"><br>
+  <em>Gambar 5.22: Penggunaan Resource pada Database MongoDB (Skenario 3C - 900 Users)</em>
+</p>
 
 ### 5.4 Skenario 4: Peak Concurrency - Spawn Rate 200
-* **Tujuan**: Mengukur batas maksimal concurrent user dengan spawn rate 200 user/detik.
-* **Durasi**: 60 Detik
-* **Hasil**:
-  - **Max Concurrent Users**: [Isi jumlah user]
-  - **Avg RPS**: [Isi rata-rata RPS]
-  - **Avg Response Time**: [Isi waktu respons] ms
-  *(Grafik hasil pengujian dapat dilihat di `result/locust_concurrency_sr200.png`)*
+
+Skenario 4 diuji dengan dua kondisi pembebanan yang berbeda:
+
+#### 5.4.1 Skenario 4A: Beban Konkurensi 500 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 200
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (0% fail) | **500** |
+| Rata-rata RPS | 130.87 |
+| Avg Response Time | 180 ms |
+
+<p align="center">
+  <img src="result/skenario4/locust_concurrency_sr200_500.png" width="400" alt="Locust Skenario 4A"><br>
+  <em>Gambar 5.23: Grafik Pengetesan Skenario 4A (500 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario4/cpu_app1_scenario4_500.png" width="200" alt="CPU App Server 1 500">
+  <img src="result/skenario4/cpu_app2_scenario4_500.png" width="200" alt="CPU App Server 2 500"><br>
+  <em>Gambar 5.24: CPU & Memory App Server 1 & 2 (Skenario 4A - 500 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario4/cpu_db_scenario4_500.png" width="300" alt="CPU Database MongoDB 500"><br>
+  <em>Gambar 5.25: Penggunaan Resource pada Database MongoDB (Skenario 4A - 500 Users)</em>
+</p>
+
+#### 5.4.2 Skenario 4B: Beban Konkurensi 700 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 200
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (dengan fail) | **700** |
+| Rata-rata RPS | 165.28 |
+| Avg Response Time | 320 ms |
+| Failure Rate | 1% |
+
+<p align="center">
+  <img src="result/skenario4/locust_concurrency_sr200_700.png" width="400" alt="Locust Skenario 4B"><br>
+  <em>Gambar 5.26: Grafik Pengetesan Skenario 4B (700 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario4/cpu_app1_scenario4_700.png" width="200" alt="CPU App Server 1 700">
+  <img src="result/skenario4/cpu_app2_scenario4_700.png" width="200" alt="CPU App Server 2 700"><br>
+  <em>Gambar 5.27: CPU & Memory App Server 1 & 2 (Skenario 4B - 700 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario4/cpu_db_scenario4_700.png" width="300" alt="CPU Database MongoDB 700"><br>
+  <em>Gambar 5.28: Penggunaan Resource pada Database MongoDB (Skenario 4B - 700 Users)</em>
+</p>
 
 ### 5.5 Skenario 5: Peak Concurrency - Spawn Rate 500
-* **Tujuan**: Mengukur batas maksimal concurrent user dengan spawn rate 500 user/detik.
-* **Durasi**: 60 Detik
-* **Hasil**:
-  - **Max Concurrent Users**: [Isi jumlah user]
-  - **Avg RPS**: [Isi rata-rata RPS]
-  - **Avg Response Time**: [Isi waktu respons] ms
-  *(Grafik hasil pengujian dapat dilihat di `result/locust_concurrency_sr500.png`)*
 
-### 5.6 Tabel Ringkasan Hasil Load Testing
+Skenario 5 diuji dengan dua kondisi pembebanan yang berbeda:
 
-| Skenario | Spawn Rate (/detik) | Max Concurrent Users (0% Failure) | Rata-rata RPS | Rata-rata Response Time (ms) |
-|----------|---------------------|-----------------------------------|---------------|------------------------------|
-| 1        | Gradual | [Isi] | [Isi] | [Isi] |
-| 2        | 50 | [Isi] | [Isi] | [Isi] |
-| 3        | 100 | [Isi] | [Isi] | [Isi] |
-| 4        | 200 | [Isi] | [Isi] | [Isi] |
-| 5        | 500 | [Isi] | [Isi] | [Isi] |
+#### 5.5.1 Skenario 5A: Beban Konkurensi 500 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 500
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (0% fail) | **500** |
+| Rata-rata RPS | 234.3 |
+| Avg Response Time | 180 ms |
+
+<p align="center">
+  <img src="result/skenario5/locust_concurrency_sr500_500.png" width="400" alt="Locust Skenario 5A"><br>
+  <em>Gambar 5.29: Grafik Pengetesan Skenario 5A (500 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario5/cpu_app1_scenario5_500.png" width="200" alt="CPU App Server 1 500">
+  <img src="result/skenario5/cpu_app2_scenario5_500.png" width="200" alt="CPU App Server 2 500"><br>
+  <em>Gambar 5.30: CPU & Memory App Server 1 & 2 (Skenario 5A - 500 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario5/cpu_db_scenario5_500.png" width="300" alt="CPU Database MongoDB 500"><br>
+  <em>Gambar 5.31: Penggunaan Resource pada Database MongoDB (Skenario 5A - 500 Users)</em>
+</p>
+
+#### 5.5.2 Skenario 5B: Beban Konkurensi 700 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 500
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (dengan fail) | **700** |
+| Rata-rata RPS | 215.15 |
+| Avg Response Time | 310 ms |
+| Failure Rate | 1.1% |
+
+<p align="center">
+  <img src="result/skenario5/locust_concurrency_sr500_700.png" width="400" alt="Locust Skenario 5B"><br>
+  <em>Gambar 5.32: Grafik Pengetesan Skenario 5B (700 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario5/cpu_app1_scenario5_700.png" width="200" alt="CPU App Server 1 700">
+  <img src="result/skenario5/cpu_app2_scenario5_700.png" width="200" alt="CPU App Server 2 700"><br>
+  <em>Gambar 5.33: CPU & Memory App Server 1 & 2 (Skenario 5B - 700 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario5/cpu_db_scenario5_700.png" width="300" alt="CPU Database MongoDB 700"><br>
+  <em>Gambar 5.34: Penggunaan Resource pada Database MongoDB (Skenario 5B - 700 Users)</em>
+</p>
+
+### 5.6 Ringkasan Hasil Load Testing
+
+| Skenario | Spawn Rate | Max Users (0% fail) | Avg RPS | Avg Response Time |
+|----------|------------|---------------------|---------|-------------------|
+| 1 - Max RPS | bertahap | 1050 | **144.69** | 320 ms |
+| 2 - Peak Concurrency | 50 | 700 | 206.29 | 170 ms |
+| 3 - Peak Concurrency | 100 | 700 | 216.76 | 330 ms |
+| 4 - Peak Concurrency | 200 | 500 | 130.87 | 180 ms |
+| 5 - Peak Concurrency | 500 | 500 | 234.3 | 180 ms |
 
 ---
 
