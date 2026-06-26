@@ -70,7 +70,7 @@ Sistem dibagi ke dalam 4 VM dengan pembagian host fisik untuk simulasi lokal:
 | 2 | VM2 | App Server 1 (Flask + Gunicorn) | B1ms | 1 vCPU | 2 GB | $17,37 | VM Azure |
 | 3 | VM3 | App Server 2 (Flask + Gunicorn) | B1ms | 1 vCPU | 2 GB | $17,37 | VM Azure |
 | 4 | VM4 | Database Server (MongoDB) | B2ls_v2 | 2 vCPU | 4 GB | $34,68 | VM Azure |
-| | | | **TOTAL** | | | **$75,78** | |
+| | | | **TOTAL** | | | **$74,17** | |
 
 Budget terpakai: $74,17 dari $75 (Biaya tersisa sekitar $0,83).
 
