@@ -62,17 +62,17 @@ Untuk mencapai hasil performa maksimal dalam batas anggaran 75 US$/bulan, diimpl
 
 ### 2.2 Tabel Spesifikasi dan Estimasi Biaya
 
-Sistem dibagi ke dalam 5 VM dengan pembagian host fisik untuk simulasi lokal:
+Sistem dibagi ke dalam 4 VM dengan pembagian host fisik untuk simulasi lokal:
 
 | No | VM | Peran | Tipe VM | CPU | RAM | Harga/bulan | Host Fisik |
 |----|------|-------|------|-----|-----|-------------|------|
 | 1 | VM1 | Load Balancer (Nginx) + Frontend | B1ls | 1 vCPU | 512 MB | $4,75 | VM Azure  |
 | 2 | VM2 | App Server 1 (Flask + Gunicorn) | B1ms | 1 vCPU | 2 GB | $17,37 | VM Azure |
-| 3 | VM3 | App Server 2 (Flask + Gunicorn) | B1ms | 1 vCPU | 2 GB | $18,98 | VM Azure |
+| 3 | VM3 | App Server 2 (Flask + Gunicorn) | B1ms | 1 vCPU | 2 GB | $17,37 | VM Azure |
 | 4 | VM4 | Database Server (MongoDB) | B2ls_v2 | 2 vCPU | 4 GB | $34,68 | VM Azure |
 | | | | **TOTAL** | | | **$75,78** | |
 
-Budget terpakai: $75,78 dari $75 (Biaya berlebih sekitar $0,78).
+Budget terpakai: $74,17 dari $75 (Biaya tersisa sekitar $0,83).
 
 ---
 
