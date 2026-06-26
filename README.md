@@ -60,6 +60,8 @@ Untuk mencapai hasil performa maksimal dalam batas anggaran 75 US$/bulan, diimpl
                            +-------------------+
 ```
 
+<img width="609" height="363" alt="TKA drawio" src="https://github.com/user-attachments/assets/4dc94adb-164e-48dc-8ad4-119b578f2706" />
+
 ### 2.2 Tabel Spesifikasi dan Estimasi Biaya
 
 Sistem dibagi ke dalam 4 VM dengan pembagian host fisik untuk simulasi lokal:
