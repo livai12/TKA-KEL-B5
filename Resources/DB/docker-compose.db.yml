@@ -1,0 +1,24 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./dump:/dump:ro
+    environment:
+      # Hapus baris MONGO_INITDB jika tidak pakai auth
+      # - MONGO_INITDB_ROOT_USERNAME=admin
+      # - MONGO_INITDB_ROOT_PASSWORD=secret
+      - MONGO_INITDB_DATABASE=orderdb
+    networks:
+      - dbnet
+
+volumes:
+  mongo_data:
+
+networks:
+  dbnet:
+    driver: bridge
