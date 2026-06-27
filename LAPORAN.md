@@ -467,11 +467,11 @@ Skenario 3 diuji dengan tiga kondisi pembebanan yang berbeda:
 | Metrik | Nilai |
 |--------|-------|
 | Max Concurrent Users (0% fail) | **700** |
-| Rata-rata RPS | 216.76 |
-| Avg Response Time | 330 ms |
+| Rata-rata RPS | 200.04 |
+| Avg Response Time | 200 ms |
 
 <p align="center">
-  <img src="result/skenario3/locust_concurrency_sr100_700.png" width="550" alt="Locust Skenario 3B"><br>
+  <img src="result/user700-spawnrate100-60s.jpg" width="550" alt="Locust Skenario 3B"><br>
   <em>Gambar 5.17: Grafik Pengetesan Skenario 3B (700 Users)</em>
 </p>
 
@@ -638,15 +638,13 @@ Skenario 5 diuji dengan dua kondisi pembebanan yang berbeda:
 |----------|------------|---------------------|---------|-------------------|
 | 1 - Max RPS | bertahap | 1050 | **144.69** | 320 ms |
 | 2 - Peak Concurrency | 50 | 700 | 206.29 | 170 ms |
-| 3 - Peak Concurrency | 100 | 700 | 216.76 | 330 ms |
+| 3 - Peak Concurrency | 100 | 700 | 200.04 | 200 ms |
 | 4 - Peak Concurrency | 200 | 500 | 130.87 | 180 ms |
 | 5 - Peak Concurrency | 500 | 600 | 154.53 | 180 ms |
 
 ---
 
 ## 6. Kesimpulan dan Saran
-
-### 6.1 Kesimpulan
 
 ### 6.1 Kesimpulan
 
@@ -657,7 +655,20 @@ Berdasarkan hasil load testing yang telah dilakukan pada kelima skenario, beriku
 - **Pengaruh Spawn Rate**: Spawn rate yang lebih tinggi (seperti 200 dan 500 user/detik) menyebabkan penurunan jumlah concurrent user maksimal yang dapat ditangani dengan aman (0% fail). Hal ini dikarenakan lonjakan trafik yang tiba-tiba membuat database connection pool dan antrean request Nginx langsung penuh seketika sebelum sistem sempat menyeimbangkan resource, mengakibatkan beberapa request mengalami timeout.
 - **Efektivitas Gevent Worker**: Penggunaan `gevent` worker pada Gunicorn terbukti **sangat efektif** dibanding sync worker standar. Dengan total hanya 9 workers (3 worker per VM), sistem mampu menangani lebih dari 1000 concurrent users karena gevent menggunakan coroutine asynchronous untuk mengalihkan pemrosesan request lain selagi menunggu respon I/O dari MongoDB.
 
-### 6.2 Saran untuk Deployment Masa Depan
+<p align="center">
+  <img src="result/bukti di kesimpulan.jpg" width="550" alt="Bukti Hasil Load Testing di Kesimpulan"><br>
+  <em>Gambar 6.1: Bukti Grafik Performa Sistem pada Beban Konkurensi Tinggi (700 Users, Spawn Rate 100)</em>
+</p>
+
+### 6.2 Analisis Penurunan Performa Gradual dan Ketidakkonsistenan RPS
+
+Penurunan performa sistem secara bertahap (*gradual performance degradation*) dari kondisi optimal pada pengujian awal disebabkan oleh dua faktor utama:
+1. **Eksploitasi Koneksi oleh Pihak Eksternal (Port Scanning)**: Terbukanya port MongoDB (27017) secara publik tanpa autentikasi memicu deteksi otomatis oleh bot scanner eksternal di internet. Sebelum basis data dihapus sepenuhnya, aktivitas pemindaian dan percobaan koneksi paralel dari berbagai IP asing ini secara konstan membanjiri basis data. Hal ini menghabiskan kuota connection pool (*connection pool exhaustion*) dan merebut utilisasi CPU pada server basis data, sehingga respon database ke server aplikasi terhambat secara intermiten.
+2. **Akumulasi Data Uji pada Basis Data (Database Bloat)**: Tidak dilakukannya pembersihan data secara berkala setelah setiap skenario pengujian mengakibatkan akumulasi data transaksi uji yang terus membengkak di koleksi `orders` dan `audit_logs`. Tanpa adanya indeks pencarian yang memadai pada fase tersebut, peningkatan volume data ini secara langsung memperlambat kueri agregasi berat (seperti kueri dashboard statistik `/admin/stats` dan riwayat pesanan), yang berujung pada peningkatan latensi respon server aplikasi.
+
+Kombinasi dari interferensi koneksi luar dan penumpukan data uji inilah yang menyebabkan performa transaksi per detik (RPS) pada Locust perlahan menurun dan tidak konsisten seiring waktu pengujian berjalan.
+
+### 6.3 Saran untuk Deployment Masa Depan
 
 1. **Caching Layer** - Menambahkan Redis sebagai cache untuk endpoint read-heavy seperti `/products` dan `/admin/stats` dapat mengurangi beban MongoDB secara signifikan
 2. **MongoDB Replica Set** - Menggunakan replica set dengan read preference `secondaryPreferred` untuk mendistribusikan query read ke secondary nodes
@@ -666,7 +677,7 @@ Berdasarkan hasil load testing yang telah dilakukan pada kelima skenario, beriku
 5. **CDN untuk Frontend** - Menggunakan CDN (Cloudflare, CloudFront) untuk menyajikan static assets agar mengurangi beban pada load balancer
 6. **Monitoring** - Implementasi monitoring stack (Prometheus + Grafana) untuk pemantauan real-time
 
-### 6.3 Estimasi Biaya pada Cloud Provider
+### 6.4 Estimasi Biaya pada Cloud Provider
 
 | Provider | Konfigurasi Setara | Estimasi/bulan |
 |----------|-------------------|----------------|
