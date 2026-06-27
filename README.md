@@ -634,7 +634,7 @@ Skenario 5 diuji dengan dua kondisi pembebanan yang berbeda:
 | 2 - Peak Concurrency | 50 | 700 | 206.29 | 170 ms |
 | 3 - Peak Concurrency | 100 | 700 | 216.76 | 330 ms |
 | 4 - Peak Concurrency | 200 | 500 | 130.87 | 180 ms |
-| 5 - Peak Concurrency | 500 | 500 | 234.3 | 180 ms |
+| 5 - Peak Concurrency | 600 | 500 | 154.53 | 180 ms |
 
 ---
 
