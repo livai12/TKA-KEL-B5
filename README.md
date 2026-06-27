@@ -36,12 +36,6 @@ Untuk mencapai hasil performa maksimal dalam batas anggaran 75 US$/bulan, diimpl
 
 ### 2.1 Diagram Arsitektur
 
-Diagram arsitektur sistem dirancang menggunakan Draw.io dan disimpan pada direktori proyek `result/arsitektur/arsitektur.png`:
-
-<p align="center">
-  <img src="result/arsitektur/arsitektur.png" width="400" alt="Diagram Arsitektur"><br>
-  <em>Gambar 2.1: Diagram Arsitektur Sistem terdistribusi</em>
-</p>
 
 ```
                            +-------------------+
@@ -65,37 +59,29 @@ Diagram arsitektur sistem dirancang menggunakan Draw.io dan disimpan pada direkt
                            |   MongoDB 7.0     |
                            +-------------------+
 ```
-
+<p align="center">
+<img width="609" height="363" alt="TKA drawio" src="https://github.com/user-attachments/assets/4dc94adb-164e-48dc-8ad4-119b578f2706" />
+</p>
 ### 2.2 Tabel Spesifikasi dan Estimasi Biaya
 
-Sistem dibagi ke dalam 5 VM dengan pembagian host fisik untuk simulasi lokal:
+Sistem dibagi ke dalam 4 VM dengan pembagian host fisik untuk simulasi lokal:
 
 | No | VM | Peran | Tipe VM | CPU | RAM | Harga/bulan | Host Fisik |
 |----|------|-------|------|-----|-----|-------------|------|
-| 1 | VM1 | Load Balancer (Nginx) + Frontend | vm1 | 1 vCPU | 512 MB | $4 | Komputer A |
-| 2 | VM2 | App Server 1 (Flask + Gunicorn) | vm3 | 1 vCPU | 2 GB | $12 | Komputer A |
-| 3 | VM3 | App Server 2 (Flask + Gunicorn) | vm3 | 1 vCPU | 2 GB | $12 | Komputer B |
-| 4 | VM4 | App Server 3 (Flask + Gunicorn) | vm3 | 1 vCPU | 2 GB | $12 | Komputer B |
-| 5 | VM5 | Database Server (MongoDB) | vm5 | 2 vCPU | 4 GB | $24 | Komputer A |
-| | | | **TOTAL** | | | **$64** | |
+| 1 | VM1 | Load Balancer (Nginx) + Frontend | B1ls | 1 vCPU | 512 MB | $4,75 | VM Azure  |
+| 2 | VM2 | App Server 1 (Flask + Gunicorn) | B1ms | 1 vCPU | 2 GB | $17,37 | VM Azure |
+| 3 | VM3 | App Server 2 (Flask + Gunicorn) | B1ms | 1 vCPU | 2 GB | $17,37 | VM Azure |
+| 4 | VM4 | Database Server (MongoDB) | B2ls_v2 | 2 vCPU | 4 GB | $34,68 | VM Azure |
+| | | | **TOTAL** | | | **$74,17** | |
 
-Budget terpakai: $64 dari $75 (sisa $11).
-
-
-
-### 2.3 Rencana Skalabilitas & Desain Jaringan
-Untuk pengujian awal atau pengembangan, seluruh VM (VM1 hingga VM5) dideploy pada **1 komputer fisik**.
-Pada tahap produksi / demo final:
-- **Host A** menjalankan VM1, VM2, dan VM5.
-- **Host B** menjalankan VM3 and VM4.
-Komunikasi antar host dilakukan melalui jaringan terjembatan (`public_network` atau bridged network) yang terhubung pada router atau access point yang sama.
+Budget terpakai: $74,17 dari $75 (Biaya tersisa sekitar $0,83).
 
 ---
 
 ## 3. Implementasi Sistem
 
-### 3.1 Setup Database MongoDB (VM5)
-MongoDB diinstal pada VM5 dengan alokasi memori terbesar (4 GB RAM) karena database memproses seluruh transaksi data I/O.
+### 3.1 Setup Database MongoDB 
+MongoDB diinstal pada VM4 dengan alokasi memori terbesar (4 GB RAM) karena database memproses seluruh transaksi data I/O.
 
 Langkah konfigurasi:
 1. Pemasangan repositori MongoDB dan instalasi paket `mongodb-org`.
@@ -113,7 +99,7 @@ Langkah konfigurasi:
    '
    ```
 
-### 3.2 Setup Application Server (VM2, VM3, VM4)
+### 3.2 Setup Application Server (VM2, VM3)
 Masing-masing dari ketiga server aplikasi dipasang runtime Python dan diatur menggunakan systemd service agar aplikasi Flask berjalan di latar belakang secara otomatis.
 
 Langkah konfigurasi:
@@ -648,7 +634,7 @@ Skenario 5 diuji dengan dua kondisi pembebanan yang berbeda:
 | 2 - Peak Concurrency | 50 | 700 | 206.29 | 170 ms |
 | 3 - Peak Concurrency | 100 | 700 | 216.76 | 330 ms |
 | 4 - Peak Concurrency | 200 | 500 | 130.87 | 180 ms |
-| 5 - Peak Concurrency | 500 | 600 | 154.53 | 180 ms |
+| 5 - Peak Concurrency | 600 | 500 | 154.53 | 180 ms |
 
 ---
 
