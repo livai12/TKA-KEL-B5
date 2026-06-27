@@ -585,59 +585,59 @@ Skenario 4 diuji dengan dua kondisi pembebanan yang berbeda:
 
 Skenario 5 diuji dengan dua kondisi pembebanan yang berbeda:
 
-#### 5.5.1 Skenario 5A: Beban Konkurensi 500 Users
+#### 5.5.1 Skenario 5A: Beban Konkurensi 600 Users
 - **Durasi:** 60 detik
 - **Spawn Rate:** 500
 - **Hasil:**
 
 | Metrik | Nilai |
 |--------|-------|
-| Max Concurrent Users (0% fail) | **500** |
-| Rata-rata RPS | 234.3 |
+| Max Concurrent Users (0% fail) | **600** |
+| Rata-rata RPS | 154.53 |
 | Avg Response Time | 180 ms |
 
 <p align="center">
-  <img src="result/skenario5/locust_concurrency_sr500_500.png" width="400" alt="Locust Skenario 5A"><br>
-  <em>Gambar 5.29: Grafik Pengetesan Skenario 5A (500 Users)</em>
-</p>
-
-<p align="center">
-  <img src="result/skenario5/cpu_app1_scenario5_500.png" width="200" alt="CPU App Server 1 500">
-  <img src="result/skenario5/cpu_app2_scenario5_500.png" width="200" alt="CPU App Server 2 500"><br>
-  <em>Gambar 5.30: CPU & Memory App Server 1 & 2 (Skenario 5A - 500 Users)</em>
-</p>
-
-<p align="center">
-  <img src="result/skenario5/cpu_db_scenario5_500.png" width="300" alt="CPU Database MongoDB 500"><br>
-  <em>Gambar 5.31: Penggunaan Resource pada Database MongoDB (Skenario 5A - 500 Users)</em>
-</p>
-
-#### 5.5.2 Skenario 5B: Beban Konkurensi 700 Users
-- **Durasi:** 60 detik
-- **Spawn Rate:** 500
-- **Hasil:**
-
-| Metrik | Nilai |
-|--------|-------|
-| Max Concurrent Users (dengan fail) | **700** |
-| Rata-rata RPS | 215.15 |
-| Avg Response Time | 310 ms |
-| Failure Rate | 1.1% |
-
-<p align="center">
-  <img src="result/skenario5/locust_concurrency_sr500_700.png" width="400" alt="Locust Skenario 5B"><br>
-  <em>Gambar 5.32: Grafik Pengetesan Skenario 5B (700 Users)</em>
+  <img src="result/skenario5/locust_concurrency_sr500_700.png" width="400" alt="Locust Skenario 5A"><br>
+  <em>Gambar 5.29: Grafik Pengetesan Skenario 5A (600 Users)</em>
 </p>
 
 <p align="center">
   <img src="result/skenario5/cpu_app1_scenario5_700.png" width="200" alt="CPU App Server 1 700">
   <img src="result/skenario5/cpu_app2_scenario5_700.png" width="200" alt="CPU App Server 2 700"><br>
-  <em>Gambar 5.33: CPU & Memory App Server 1 & 2 (Skenario 5B - 700 Users)</em>
+  <em>Gambar 5.30: CPU & Memory App Server 1 & 2 (Skenario 5A - 600 Users)</em>
 </p>
 
 <p align="center">
   <img src="result/skenario5/cpu_db_scenario5_700.png" width="300" alt="CPU Database MongoDB 700"><br>
-  <em>Gambar 5.34: Penggunaan Resource pada Database MongoDB (Skenario 5B - 700 Users)</em>
+  <em>Gambar 5.31: Penggunaan Resource pada Database MongoDB (Skenario 5A - 600 Users)</em>
+</p>
+
+#### 5.5.2 Skenario 5B: Beban Konkurensi 1000 Users
+- **Durasi:** 60 detik
+- **Spawn Rate:** 500
+- **Hasil:**
+
+| Metrik | Nilai |
+|--------|-------|
+| Max Concurrent Users (dengan fail) | **1000** |
+| Rata-rata RPS | 196.75 |
+| Avg Response Time | 310 ms |
+| Failure Rate | 3% |
+
+<p align="center">
+  <img src="result/skenario5/locust_concurrency_sr500_500.png" width="400" alt="Locust Skenario 5B"><br>
+  <em>Gambar 5.32: Grafik Pengetesan Skenario 5B (1000 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario5/cpu_app1_scenario5_500.png" width="200" alt="CPU App Server 1 500">
+  <img src="result/skenario5/cpu_app2_scenario5_500.png" width="200" alt="CPU App Server 2 500"><br>
+  <em>Gambar 5.33: CPU & Memory App Server 1 & 2 (Skenario 5B - 1000 Users)</em>
+</p>
+
+<p align="center">
+  <img src="result/skenario5/cpu_db_scenario5_500.png" width="300" alt="CPU Database MongoDB 500"><br>
+  <em>Gambar 5.34: Penggunaan Resource pada Database MongoDB (Skenario 5B - 1000 Users)</em>
 </p>
 
 ### 5.6 Ringkasan Hasil Load Testing
@@ -648,7 +648,7 @@ Skenario 5 diuji dengan dua kondisi pembebanan yang berbeda:
 | 2 - Peak Concurrency | 50 | 700 | 206.29 | 170 ms |
 | 3 - Peak Concurrency | 100 | 700 | 216.76 | 330 ms |
 | 4 - Peak Concurrency | 200 | 500 | 130.87 | 180 ms |
-| 5 - Peak Concurrency | 500 | 500 | 234.3 | 180 ms |
+| 5 - Peak Concurrency | 500 | 600 | 154.53 | 180 ms |
 
 ---
 
