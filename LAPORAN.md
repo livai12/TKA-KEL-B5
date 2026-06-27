@@ -648,12 +648,14 @@ Skenario 5 diuji dengan dua kondisi pembebanan yang berbeda:
 
 ### 6.1 Kesimpulan
 
-[Tuliskan analisis terhadap hasil pengujian. Contoh:]
+### 6.1 Kesimpulan
 
-- Arsitektur dengan 2 app server (VM2 & VM3) + 1 load balancer (VM1) + 1 database server (VM4) mampu mencapai rata-rata RPS sebesar **144.69** dengan 0% failure rate
-- Bottleneck utama terletak pada [database I/O / CPU app server / network bandwidth]
-- Spawn rate yang lebih tinggi menyebabkan penurunan jumlah concurrent user yang dapat ditangani karena [alasan]
-- Penggunaan gevent worker pada Gunicorn terbukti [efektif/kurang efektif] dibanding sync worker karena [alasan]
+Berdasarkan hasil load testing yang telah dilakukan pada kelima skenario, berikut adalah analisis dan kesimpulan mengenai performa sistem:
+
+- **Kapasitas Maksimal Sistem**: Arsitektur dengan 3 App Server (VM2, VM3, & VM4) yang di-load balance oleh Nginx (VM1) serta menggunakan database MongoDB terpisah (VM5) mampu menangani hingga **1050 concurrent users** dengan **0% failure rate** pada Skenario 1B (rata-rata RPS **144.69**).
+- **Bottleneck Utama**: Bottleneck utama sistem terletak pada **Database Server (MongoDB)**. Ketika jumlah user meningkat sangat tinggi, penggunaan CPU pada VM5 (Database Server) melonjak tajam (mencapai >140% pada Docker Stats), karena MongoDB harus melakukan operasi penulisan transaksi (`POST /orders`) yang melibatkan I/O disk dan pembaruan index secara terus-menerus.
+- **Pengaruh Spawn Rate**: Spawn rate yang lebih tinggi (seperti 200 dan 500 user/detik) menyebabkan penurunan jumlah concurrent user maksimal yang dapat ditangani dengan aman (0% fail). Hal ini dikarenakan lonjakan trafik yang tiba-tiba membuat database connection pool dan antrean request Nginx langsung penuh seketika sebelum sistem sempat menyeimbangkan resource, mengakibatkan beberapa request mengalami timeout.
+- **Efektivitas Gevent Worker**: Penggunaan `gevent` worker pada Gunicorn terbukti **sangat efektif** dibanding sync worker standar. Dengan total hanya 9 workers (3 worker per VM), sistem mampu menangani lebih dari 1000 concurrent users karena gevent menggunakan coroutine asynchronous untuk mengalihkan pemrosesan request lain selagi menunggu respon I/O dari MongoDB.
 
 ### 6.2 Saran untuk Deployment Masa Depan
 
